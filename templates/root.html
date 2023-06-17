@@ -2,7 +2,10 @@
 <html lang="en">
     {% include 'head.html' %}
     <body>
-        {% include 'header.html' %}
+        
+        {% block header %}
+        {% endblock header %}
+
 
         {% block about %}
         {% endblock about %}

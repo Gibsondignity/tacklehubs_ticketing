@@ -1,10 +1,12 @@
+{% load static %}
+
 <div class="header-bar">
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-10 col-lg-2 order-lg-1">
                 <div class="site-branding">
                     <div class="site-title">
-                        <a href="#"><img src="static/images/tacklehubs_logo.png" alt="logo"></a>
+                        <a href="#"><img src="{% static 'images/tacklehubs_logo.png' %}" alt="logo"></a>
                     </div><!-- .site-title -->
                 </div><!-- .site-branding -->
             </div><!-- .col -->
@@ -19,18 +21,18 @@
                     </div><!-- .hamburger-menu -->
 
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About us</a></li>
-                        <li><a href="#">Events</a></li>
-                        <li><a href="#">News</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#about-us">About us</a></li>
+                        {% comment %} <li><a href="#">Events</a></li> {% endcomment %}
                         <li><a href="#">Contact</a></li>
+                        <li><a href="#">Login / Register</a></li>
                     </ul>
                 </nav><!-- .site-navigation -->
             </div><!-- .col -->
 
             <div class="col-lg-3 d-none d-lg-block order-2 order-lg-3">
                 <div class="buy-tickets">
-                    <a class="btn gradient-bg" href="#">Buy Tickets</a>
+                    <a class="btn gradient-bg" href="{% url 'events' %}">Buy Tickets</a>
                 </div><!-- .buy-tickets -->
             </div><!-- .col -->
         </div><!-- .row -->

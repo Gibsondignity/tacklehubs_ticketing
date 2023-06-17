@@ -2,6 +2,10 @@
 {% load static %}
 
 
+{% block header %}
+    {% include 'header.html' %}
+{% endblock header %}
+
 {% block about %}
     {% include 'tickets/home/about.html' %}
 {% endblock about %}
@@ -22,11 +26,7 @@
 {% endblock locations %}
 
 
-
-
-
 {% block content %}
-
 
     <div class="newsletter-subscribe">
         <div class="container">
