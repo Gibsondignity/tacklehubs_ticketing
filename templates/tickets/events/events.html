@@ -29,23 +29,25 @@
 
 <div class="container">
     <div class="row events-list">
+        
+        {% for event in events %}
         <div class="col-12 col-lg-6 single-event">
             <figure class="events-thumbnail">
-                <a href="#"><img src="images/event-1.jpg" alt=""></a>
+                <a href="#"><img src="static/images/event-1.jpg" alt=""></a>
             </figure>
 
             <div class="event-content-wrap">
                 <header class="entry-header flex justify-content-between">
                     <div>
-                        <h2 class="entry-title"><a href="#">U2 Concert in Detroit</a></h2>
+                        <h2 class="entry-title"><a href="#">{{ event.event_name }}</a></h2>
 
-                        <div class="event-location"><a href="#">Ford Field  2000 Brush St, Detroit, MI 48226, EE. UU.</a></div>
+                        <div class="event-location"><a href="#">{{ event.location }}</a></div>
 
-                        <div class="event-date">May 29, 2018 @ 8:00 Pm - May 30, 2018 @ 4:00 Am</div>
+                        <div class="event-date">{{event.event_date}} @ {{event.event_date}} </div>
                     </div>
 
                     <div class="event-cost flex justify-content-center align-items-center">
-                        from<span>$89</span>
+                        <span>Ghc {{event.category.price}}</span>
                     </div>
                 </header>
 
@@ -55,41 +57,7 @@
             </div>
         </div>
 
-        
-        
-        
-
-        <div class="col-12 col-lg-6 single-event">
-            <figure class="events-thumbnail">
-                <a href="#"><img src="images/event-4.jpg" alt=""></a>
-            </figure>
-
-            <div class="event-content-wrap">
-                <header class="entry-header flex justify-content-between">
-                    <div>
-                        <h2 class="entry-title"><a href="#">Summer Festival in Detroit</a></h2>
-
-                        <div class="event-location"><a href="#">Ford Field  2000 Brush St, Detroit, MI 48226, EE. UU.</a></div>
-
-                        <div class="event-date">May 29, 2018 @ 8:00 Pm - May 30, 2018 @ 4:00 Am</div>
-                    </div>
-
-                    <div class="event-cost flex justify-content-center align-items-center">
-                        from<span>$89</span>
-                    </div>
-                </header>
-
-                <div class="entry-content">
-                    <p>Vestibulum eget lacus at mauris sagittis varius. Etiam ut venenatis dui. Nullam tellus risust lacus at mauris sagittis variusut.</p>
-                </div>
-
-                <footer class="entry-footer">
-                    <a href="#">Buy Tikets</a>
-                </footer>
-            </div>
-        </div>
-
-
+        {% endfor %}
         <div class="col-12 col-lg-6 single-event">
             <figure class="events-thumbnail">
                 <a href="#"><img src="images/event-6.jpg" alt=""></a>
@@ -98,13 +66,17 @@
         </div>
     </div>
 
+
+
     <div class="row">
         <div class="col-md-12">
             <div class="load-more-btn">
                 <a class="btn gradient-bg" href="#">Load More</a>
             </div>
         </div>
-    </div>
+    </div> 
+
+
 </div>
 
 <div class="upcoming-events-outer">
