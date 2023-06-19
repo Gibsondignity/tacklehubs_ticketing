@@ -38,14 +38,14 @@ class UserForm(FormSettings):
     def clean_email(self, *args, **kwargs):
         formEmail = self.cleaned_data['email'].lower()
         if self.instance.pk is None:  # Insert
-            if Users.objects.filter(email=formEmail).exists():
+            if User.objects.filter(email=formEmail).exists():
                 raise forms.ValidationError(
                     "The given email is already registered")
         else:  # Update
             dbEmail = self.Meta.model.objects.get(
                 id=self.instance.pk).email.lower()
             if dbEmail != formEmail:  # There has been changes
-                if Users.objects.filter(email=formEmail).exists():
+                if User.objects.filter(email=formEmail).exists():
                     raise forms.ValidationError(
                         "The given email is already registered")
         return formEmail
@@ -63,6 +63,6 @@ class UserForm(FormSettings):
         return make_password(password)
 
     class Meta:
-        model = Users
+        model = User 
         fields = ['first_name', 'last_name', 'email', 'password']
  

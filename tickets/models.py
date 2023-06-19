@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import Users
+from accounts.models import User
 from django.core.exceptions import ValidationError
 
 # Create your models here.
@@ -17,7 +17,7 @@ class FileField(models.FileField):
 class Category(models.Model):
     category_name = models.CharField(max_length=65)
     price = models.DecimalField(max_digits=12, decimal_places=2)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     date_created = models.DateTimeField(auto_now=True)
     date_updated = models.DateTimeField(auto_now_add=True)
     
@@ -28,7 +28,7 @@ class Category(models.Model):
     
 class Event(models.Model):
     event_name = models.CharField(max_length=256, )
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True) 
     event_date = models.DateField()
     event_time = models.TimeField(null=True)

@@ -17,7 +17,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
 # LOCAL IMPORTS
-from .models import Users
+from .models import User
 
 from .forms import UserForm
 
@@ -108,7 +108,7 @@ def password_reset_request(request):
         
 		if password_reset_form.is_valid():
 			data = password_reset_form.cleaned_data['email']
-			associated_users = Users.objects.filter(Q(email=data))
+			associated_users = User.objects.filter(Q(email=data))
 			if associated_users.exists():
 				for user in associated_users:
 					
