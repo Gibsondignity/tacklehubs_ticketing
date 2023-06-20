@@ -1169,6 +1169,8 @@ a:hover, a:active {
 
 .events-list-page .events-thumbnail {
     margin: 0;
+   
+    
 }
 
 .events-list-page .events-thumbnail img {
@@ -1544,7 +1546,7 @@ ul.tabs-nav .tab-nav.active {
 
 .single-event-page .event-content-wrap .events-thumbnail img {
     display: block;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .single-event-page .tabs {

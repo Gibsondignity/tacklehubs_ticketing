@@ -6,34 +6,34 @@
 {% include 'tickets/events/header.html' %}
 
 <form class="events-search">
-<div class="container">
-    <div class="row">
-        <div class="col-12 col-md-3">
-            <input type="date" placeholder="Date">
-        </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <input type="date" placeholder="Date">
+            </div>
 
-        <div class="col-12 col-md-3">
-            <input type="text" placeholder="Event">
-        </div>
+            <div class="col-12 col-md-3">
+                <input type="text" placeholder="Event">
+            </div>
 
-        <div class="col-12 col-md-3">
-            <input type="text" placeholder="Location">
-        </div>
+            <div class="col-12 col-md-3">
+                <input type="text" placeholder="Location">
+            </div>
 
-        <div class="col-12 col-md-3">
-            <input class="btn gradient-bg" type="submit" value="Search Events">
+            <div class="col-12 col-md-3">
+                <input class="btn gradient-bg" type="submit" value="Search Events">
+            </div>
         </div>
     </div>
-</div>
 </form>
 
 <div class="container">
+    
     <div class="row events-list">
-        
         {% for event in events %}
         <div class="col-12 col-lg-6 single-event">
-            <figure class="events-thumbnail">
-                <a href="#"><img src="static/images/event-1.jpg" alt=""></a>
+            <figure class="events-thumbnail" >
+                <a href="#"><img src={{media_url}}{{event.picture}} alt=""></a>
             </figure>
 
             <div class="event-content-wrap">
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="event-cost flex justify-content-center align-items-center">
-                        <span>Ghc {{event.category.price}}</span>
+                        <span>Gh₵ {{event.category.price}}</span>
                     </div>
                 </header>
 
@@ -56,15 +56,10 @@
                 </footer>
             </div>
         </div>
-
         {% endfor %}
-        <div class="col-12 col-lg-6 single-event">
-            <figure class="events-thumbnail">
-                <a href="#"><img src="images/event-6.jpg" alt=""></a>
-            </figure>
-  
-        </div>
     </div>
+
+    
 
 
 
@@ -74,10 +69,14 @@
                 <a class="btn gradient-bg" href="#">Load More</a>
             </div>
         </div>
-    </div> 
-
+    </div>
 
 </div>
+
+
+
+
+
 
 <div class="upcoming-events-outer">
     <div class="container">
