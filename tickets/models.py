@@ -61,7 +61,8 @@ class Ticket(models.Model):
     name = models.CharField(max_length=65)
     email = models.EmailField()
     phone_number = models.CharField(max_length=20)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True)
+    catgory = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     date_created = models.DateTimeField(auto_now=True)
     date_updated = models.DateTimeField(auto_now_add=True)
     

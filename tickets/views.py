@@ -19,8 +19,8 @@ def events(request):
 
 def event(request, pk, slug):
     
-    event = Event.objects.filter(pk=pk).first()
+    events = Event.objects.filter(pk=pk).first()
     media_url = "http://127.0.0.1:8000/media/"
     
-    context = {"event": event, "media_url":media_url}
+    context = {"event": events, "media_url":media_url}
     return render(request, 'tickets/events/events.html', context)
