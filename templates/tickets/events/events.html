@@ -33,7 +33,7 @@
         {% for event in events %}
         <div class="col-12 col-lg-4 single-event" sytle = "padding: 50px; overflow: hidden; border: 2px solid; box-shadow: 5px 10px; ">
             
-            <a href="#"><img src={{media_url}}{{event.picture}} alt="" width="100%"></a>
+            <a href="{% url 'event' event.pk event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100%"></a>
 
             <div class="event-content-wrap">
                 <header class="entry-header flex justify-content-between">
@@ -43,16 +43,15 @@
                         <div class="event-location"><a href="#">{{ event.location }}</a></div>
 
                         <div class="event-date">{{ event.event_date }} @ {{ event.event_time }}</div>
-                        {{event.slug}}
                     </div>
                     
 
                     <div class="event-cost flex justify-content-center align-items-center">
-                    <b><span>$89</span></b>
+                    <b> GH₵ <span>{{event.starting_price}}+</span></b>
                     </div>
                 </header>
                 
-                <a href="#">
+                <a href="{% url 'event' event.id event.slug %}">
                     <footer class="entry-footer">
                         
                         <button class="rounded-button" style="

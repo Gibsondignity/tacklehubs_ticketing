@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 
 # Create your models here.
 class FileField(models.FileField):
@@ -21,22 +22,16 @@ class Event(models.Model):
     event_date = models.DateField()
     event_time = models.TimeField(null=True)
     description = models.CharField(max_length=1000, blank=True, null=True)
+    starting_price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     picture = FileField(upload_to='gallery', blank=True, null=True)
     location = models.CharField(max_length=65, null=True, blank=True)
-    slug = models.CharField(max_length=256, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     date_created = models.DateTimeField(auto_now=True)
     date_updated = models.DateTimeField(auto_now_add=True)
     
-    def generate_slug(self):
-        name = self.event_name
-        name = name.lower()
-        slug = name.replace(" ", "_")
-        
-        return slug
         
     def save(self, *args, **kwargs):
-        self.slug = self.generate_slug
-        
+        self.slug = slugify(self.event_name)  # Generate slug from event name
         super(Event, self).save(*args, **kwargs)
     
     
@@ -73,3 +68,7 @@ class Ticket(models.Model):
     
     def __str__(self):
         return f"{self.email} -> {self.event}" 
+    
+    
+    
+    
