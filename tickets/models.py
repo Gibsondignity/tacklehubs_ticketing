@@ -35,8 +35,21 @@ class Event(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
     picture = FileField(upload_to='gallery', blank=True, null=True)
     location = models.CharField(max_length=65, null=True)
+    slug = models.CharField(max_length=256, blank=True, null=True)
     date_created = models.DateTimeField(auto_now=True)
     date_updated = models.DateTimeField(auto_now_add=True)
+    
+    def generate_slug(self):
+        name = self.event_name
+        name = name.lower()
+        slug = name.replace(" ", "_")
+        
+        return slug
+        
+    def save(self, *args, **kwargs):
+        self.slug = self.generate_slug
+        
+        super(Event, self).save(*args, **kwargs)
     
     
     def __str__(self):
