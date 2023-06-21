@@ -532,9 +532,9 @@ a:hover, a:active {
 # Homepage - Featured Events
 --------------------------------------------------------------*/
 .homepage-featured-events {
-    height: auto;
+    /* height: auto; */
     padding: 110px 0 150px;
-    background: url("images/featured-events-bg.jpg") no-repeat center;
+    background: url("static/images/featured-events-bg.jpg") no-repeat center;
     background-size: cover !important;
 }
 
@@ -613,7 +613,7 @@ a:hover, a:active {
 
 @media screen and (min-width: 992px) {
     .homepage-featured-events {
-        min-height: 1260px;
+        min-height: 720px;
     }
 
     .featured-events-wrap .event-content-wrap {
@@ -690,7 +690,7 @@ a:hover, a:active {
 
 @media screen and (min-width: 1200px) {
     .homepage-featured-events {
-        min-height: 1480px;
+        min-height: 800px;
     }
 
     .homepage-featured-events .positioning-event-1 {
@@ -871,7 +871,7 @@ a:hover, a:active {
 # Homepage - Regional Events
 --------------------------------------------------------------*/
 .homepage-regional-events {
-    min-height: 1500px;
+    /* min-height: 500px; */
     padding-top: 280px;
     background: url("images/regional-events-bg.jpg") no-repeat;
     background-size: cover;

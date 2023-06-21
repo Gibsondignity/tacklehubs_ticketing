@@ -1,0 +1,154 @@
+{% extends 'root.html' %}
+{% load static %}
+
+
+{% block content %}
+{% include 'tickets/event/header.html' %}
+
+<div class="container">
+    <div class="row">
+        
+        <div class="col-12 single-event">
+            <div class="event-content-wrap">
+                <header class="entry-header flex flex-wrap justify-content-between align-items-end">
+                    <div class="single-event-heading">
+                        <h2 class="entry-title">{{ event.event_name }}</h2>
+
+                        <div class="event-location"><a href="#">{{ event.location }}</a></div>
+
+                        <div class="event-date">{{ event.event_date }} @ {{ event.event_time }} </div>
+                    </div>
+
+                    {% comment %} <div class="buy-tickets flex justify-content-center align-items-center">
+                        <a class="btn gradient-bg" href="#">Buy Tikets</a>
+                    </div> {% endcomment %}
+                </header>
+
+                {% comment %} <figure class="events-thumbnail">
+                    <img src={{media_url}}{{event.picture}} alt="">
+                </figure> {% endcomment %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="tabs">
+                <ul class="tabs-nav flex">
+                    <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_details">Details</li>
+                    <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_venue">Description</li>
+                     {% comment %}
+                    <li class="tab-nav flex justify-content-center align-items-center" data-target="#tab_organizers">Organizers</li> 
+                    {% endcomment %}
+                </ul>
+
+                <div class="tabs-container">
+                    <div id="tab_details" class="tab-content">
+                        <div class="flex flex-wrap justify-content-between">
+                            <div class="single-event-details">
+                                <div class="single-event-details-row">
+                                    <label>Date:</label>
+                                    <p>{{event.event_date}} @ {{event.event_time}}</p>
+                                </div>
+
+                                <div class="single-event-details-row">
+                                    <label>Price:</label>
+                                    <p>GH₵ {{ event.starting_price }} </p>
+                                </div>
+
+                                <div class="single-event-details-row">
+                                    <label>Categories:</label>
+                                    {% for category in categories %}
+                                        <p>{{ category.category_name }}</p>
+                                    {% endfor %}
+                                </div>
+
+                                
+                            </div>
+                            <a href=""><img src={{media_url}}{{event.picture}} alt="" width="100%"></a>
+                            {% comment %} <div class="single-event-map">
+                                <iframe id="gmap_canvas" src="https://maps.google.com/maps?q=university of san francisco&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+
+                     <div id="tab_venue" class="tab-content">
+                        <p>{{ event.description }}</p>
+                    </div>
+                    {% comment %}
+                    <div id="tab_organizers" class="tab-content">
+                        <p>Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna.</p>
+                    </div> 
+                    {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="event-tickets">
+                {% for category in categories %}
+                <div class="ticket-row flex flex-wrap justify-content-between align-items-center">
+                    <div class="ticket-type flex justify-content-between align-items-center">
+                        <h3 class="entry-title"><span>{{category.category_name}}</span></h3>
+
+                        <div class="ticket-price">GH₵ {{category.price}}</div>
+                    </div>
+
+                    <div class="flex align-items-center">
+                        <div class="number-of-ticket flex justify-content-between align-items-center">
+                            <span class="decrease-ticket">-</span>
+                            <input type="number" class="ticket-count" value="1" />
+                            <span class="increase-ticket">+</span>
+                        </div>
+
+                        <div class="clear-ticket-count">Clear</div>
+                    </div>
+
+                    <input type="submit" class="btn gradient-bg" value="Buy Ticket">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% comment %} <div class="row">
+        <div class="col-12">
+            <div class="upcoming-events">
+                <div class="upcoming-events-header">
+                    <h4>Upcoming Events</h4>
+                </div>
+
+                <div class="upcoming-events-list">
+                    <div class="upcoming-event-wrap flex flex-wrap justify-content-between align-items-center">
+                        <figure class="events-thumbnail">
+                            <a href="#"><img src="images/upcoming-1.jpg" alt=""></a>
+                        </figure>
+
+                        <div class="entry-meta">
+                            <div class="event-date">
+                                25<span>February</span>
+                            </div>
+                        </div>
+
+                        <header class="entry-header">
+                            <h3 class="entry-title"><a href="#">Blockchain Conference</a></h3>
+
+                            <div class="event-date-time">May 29, 2018 @ 8:00 Pm - May 30, 2018 @ 4:00 Am</div>
+
+                            <div class="event-speaker">Speackers: Maria Williams, Luis Smith, James Doe</div>
+                        </header>
+
+                        <footer class="entry-footer">
+                            <a href="#">Buy Tikets</a>
+                        </footer>
+                    </div>
+   
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+</div>
+
+{% endblock content %}

@@ -6,110 +6,26 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
+                    {% for event in events %}
+                    
                     <div class="featured-events-wrap flex flex-wrap justify-content-between">
                         
-                        <div class="event-content-wrap positioning-event-1">
+                        <div class="event-content-wrap positioning-event-{{event.id}}">
                             <figure>
-                                <a href="#"><img src="{% static 'images/1.jpg' %}" alt="1"></a>
+                                <a href="{% url 'event' event.id event.slug %}"><img src={{media_url}}{{event.picture}} alt="1">
                             </figure>
 
                             <header class="entry-header">
-                                <h3 class="entry-title">Michael Smith in concert</h3>
+                                <h3 class="entry-title">{{ event.event_name }}</h3>
 
-                                <div class="posted-date">August 25</div>
+                                <div class="posted-date">{{ event.event_date }}</div>
                             </header>
+                        </a>
                         </div>
 
-                        <div class="event-content-wrap positioning-event-2">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/2.jpg' %}" alt=""></a>
-                            </figure>
-
-                            <header class="entry-header">
-                                <h3 class="entry-title">Street art fest</h3>
-
-                                <div class="posted-date">November 28</div>
-                            </header>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-3">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/3.jpg' %}" alt=""></a>
-                            </figure>
-
-                            <header class="entry-header">
-                                <h3 class="entry-title">Anabelle in concert</h3>
-
-                                <div class="posted-date">August 28</div>
-                            </header>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-4 half">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/events-in-london.jpg' %}" alt=""></a>
-                            </figure>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-5 half">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/check-july.png' %}" alt=""></a>
-                            </figure>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-6 half">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/summer-festivals.jpg' %}" alt=""></a>
-                            </figure>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-7">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/90.jpg' %}" alt=""></a>
-                            </figure>
-
-                            <header class="entry-header">
-                                <h3 class="entry-title">90’s Disco Night</h3>
-
-                                <div class="posted-date">August 28</div>
-                            </header>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-8">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/modern.jpg' %}" alt="1"></a>
-                            </figure>
-
-                            <header class="entry-header">
-                                <h3 class="entry-title">Modern Ballet</h3>
-
-                                <div class="posted-date">August 25</div>
-                            </header>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-9">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/smoke.jpg' %}" alt=""></a>
-                            </figure>
-
-                            <header class="entry-header">
-                                <h3 class="entry-title">Smoke show</h3>
-
-                                <div class="posted-date">August 28</div>
-                            </header>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-10 half">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/summer-festival.jpg' %}" alt=""></a>
-                            </figure>
-                        </div>
-
-                        <div class="event-content-wrap positioning-event-11 half">
-                            <figure>
-                                <a href="#"><img src="{% static 'images/autumn.jpg' %}" alt=""></a>
-                            </figure>
-                        </div>
                     </div>
+
+                    {% endfor %}
                 </div>
             </div>
         </div>
