@@ -136,3 +136,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+PAYSTACK_SECRET_KEY = "sk_test_60f48dab304e54252bdd5da374a980063b2b5d73"
+PAYSTACK_PUBLIC_KEY = "pk_test_a995b2587e7d472849f75c3d88699b2464f4c8d2"
+
+
+
+# # Email configuration
+EMAIL_HOST = 'smtp.webmail.com'
+EMAIL_HOST_USER = 'ticket@tacklehubs.com'
+EMAIL_HOST_PASSWORD = 'TackleHubsTicket'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

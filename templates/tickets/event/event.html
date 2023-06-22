@@ -97,16 +97,26 @@
                     </div>
 
                     <div class="flex align-items-center">
+                        
                         <div class="number-of-ticket flex justify-content-between align-items-center">
                             <span class="decrease-ticket">-</span>
-                            <input type="number" class="ticket-count" value="1" />
+                            <input type="number" class="ticket-count" name="number_of_tickets" value="1" />
                             <span class="increase-ticket">+</span>
+
+                            <form method="POST" action="{% url 'event' event.id event.slug  %}">
+                                {% csrf_token %}  
+                            <input type="hidden" class="" name="category_id" value="{{category.id}}" />
+                            <input type="hidden" class="" name="price" value="{{category.price}}" />
+                            <input type="hidden" class="" name="event_id" value="{{event.id}}" />
+                            <input type="hidden" class="ticket-count" name="number_of_tickets" value="1" />
+                            
                         </div>
 
                         <div class="clear-ticket-count">Clear</div>
                     </div>
 
                     <input type="submit" class="btn gradient-bg" value="Buy Ticket">
+                </form> 
                 </div>
                 {% endfor %}
             </div>

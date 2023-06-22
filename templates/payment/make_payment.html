@@ -1,0 +1,126 @@
+{% extends 'payment/root.html' %}
+
+
+{% block style %}
+
+    <style>
+        #demo {
+            background:none;
+            border-radius: 4px;
+            padding: 20px;
+            text-align:center;
+            margin:0 auto;
+            width: 300px;
+            
+          }
+    </style>
+
+{% endblock style %}
+
+{% block content %} 
+    <section data-bs-version="5.1" class="form5 cid-sNT5TbYGLu" id="form5-12">
+    
+    
+            {% if messages %} 
+                    {% for message in messages %}
+                        <div class="col-lg-12 mr-auto ml-auto alert bg-warning alert-dismissable pb-0 pt-0" role="alert">
+                            
+                            <div class="row">
+                                <div class="mr-auto ml-auto">
+                                <p class="h5 mr-auto ml-auto p-2 text-light">
+                                     <b>
+                                        {% if message.tags ==  "alert-danger" %}
+                                            <i class="fa fa-exclamation-triangle mr-3 text-danger"></i> {{ message }}
+                                        {% else %}
+                                            <i class="fa fa-check text-danger"></i> {{ message }}
+                                        {% endif %}
+                                    </b>
+                                </p>
+                            </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+
+        
+        <div class="container">
+            <div class="card">
+                <!-- Start Card Body -->
+                <div class="card-body">
+
+                    <center>
+                        <div class="mbr-section-head">
+                            <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-1" style="font-size: 30px;"><strong>Confirm Payment</strong></h3>
+                            
+                        </div>
+
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
+                                <h5>Make payment for: GH₵ {{amount}}</h5>
+                                <div class="form-submit">
+                                    <script src="https://js.paystack.co/v1/inline.js"></script>
+                                    <button type="submit" class="btn btn-primary" onclick="payWithPaystack()"> Make Payment </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!--
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-lg-8 mx-auto mbr-form" data-form-type="formoid">
+                                <h5>Make payment for: {{currency}} 1,200</h5>
+
+                                <div id="demo">
+                                   
+                                    <paybox-button-widget merchant-key="demo"  total="5" order-id ="{{payment.ref}}" currency="GHS" type="primary rounded" payload="{{payload}}"  shipping="enabled"> Make Payment </paybox-button-widget>
+                                    
+                                </div>
+                                    
+
+                            </div>
+                        </div>
+                            
+                        -->
+                    </center>
+            
+            </div>
+          </div>
+            <!-- End Card Body --> 
+        </div> 
+    </section>
+
+ 
+    <script src="https://widget.paybox.com.co/js/app.js" defer></script>
+    
+    <script>
+
+            function payWithPaystack(){
+            let currency = 'GHS';
+            let plan = "";
+            let ref = '{{ payment.ref }}';
+            
+            let obj = {
+            key: '{{ pub_key }}', // Replace with your public key
+            email: '{{ payment.email }}',
+            amount: {{amount}}*100,
+            ref: ref,
+
+        callback: function(response){
+            window.location.href = "{% url 'verify_payment' payment.ref %}";
+            }
+
+        }
+        if (Boolean(currency)){
+            obj.currency = currency.toUpperCase()
+        }
+        if (Boolean(plan)){
+            obj.plan = plan;
+        }
+
+        var handler = PaystackPop.setup(obj); 
+        handler.openIframe();
+    }
+  
+    </script>
+
+        {% endblock content %} 

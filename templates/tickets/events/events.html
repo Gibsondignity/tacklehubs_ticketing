@@ -38,9 +38,9 @@
             <div class="event-content-wrap">
                 <header class="entry-header flex justify-content-between">
                     <div>
-                        <h2 class="entry-title"><a href="#">{{event.event_name}}</a></h2>
+                        <h2 class="entry-title"><a href="{% url 'event' event.pk event.slug %}">{{event.event_name}}</a></h2>
 
-                        <div class="event-location"><a href="#">{{ event.location }}</a></div>
+                        <div class="event-location"><a href="{% url 'event' event.pk event.slug %}">{{ event.location }}</a></div>
 
                         <div class="event-date">{{ event.event_date }} @ {{ event.event_time }}</div>
                     </div>
