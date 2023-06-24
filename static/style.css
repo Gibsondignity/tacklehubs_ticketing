@@ -1000,10 +1000,11 @@ a:hover, a:active {
 # Newsletter
 --------------------------------------------------------------*/
 .newsletter-subscribe {
-    padding: 150px 0;
+    padding: 10px 0;
     background: url("images/newsletter-bg.jpg") no-repeat;
     background-size: cover;
     text-align: center;
+    color: #fff;
 }
 
 .newsletter-subscribe .entry-title {
