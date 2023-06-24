@@ -2,18 +2,23 @@
 {% load static %}
 
 
+
+
 {% block header %}
     {% include 'header.html' %}
 {% endblock header %}
+
+
+
 
 {% block about %}
     {% include 'tickets/home/about.html' %}
 {% endblock about %}
 
 
-{% block events %}
+{% comment %} {% block events %}
     {% include 'tickets/home/events.html' %}
-{% endblock events %}
+{% endblock events %} {% endcomment %}
 
 
 {% block upcoming_events %}
