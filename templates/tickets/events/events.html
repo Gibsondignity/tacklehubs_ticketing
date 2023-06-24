@@ -31,7 +31,7 @@
     <div class="row events-list">
         
         {% for event in events %}
-        <div class="col-12 col-lg-4 single-event" sytle = "padding: 50px; overflow: hidden; border: 2px solid; box-shadow: 5px 10px; ">
+        <div class="col-12 col-lg-4 single-event" sytle = "padding: 50px; overflow: hidden; border: 2px solid; box-shadow: 5px 10px; top: 400px">
             
             <a href="{% url 'event' event.pk event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100%"></a>
 
@@ -101,9 +101,9 @@
                     <div class="upcoming-events-list">
                         {% for event in upcomming_events %}
                         <div class="upcoming-event-wrap flex flex-wrap justify-content-between align-items-center">
-                            <figure class="events-thumbnail">
-                                <a href="{% url 'event' event.id event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100%" style="border-radius: 50%"></a>
-                            </figure>
+                            {% comment %} <figure class="events-thumbnail"> {% endcomment %}
+                                <a href="{% url 'event' event.id event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100px"></a>
+                            {% comment %} </figure> {% endcomment %}
 
                             <div class="entry-meta">
                                 <div class="event-date">
@@ -132,34 +132,7 @@
     </div>
 </div>
 
-<div class="newsletter-subscribe">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <header class="entry-header">
-                    <h2 class="entry-title">Subscribe to our newsletter to get the latest trends & news</h2>
-                    <p>Join our database NOW!</p>
-                </header>
 
-                <div class="newsletter-form">
-                    <form class="flex flex-wrap justify-content-center align-items-center">
-                        <div class="col-md-12 col-lg-3">
-                            <input type="text" placeholder="Name">
-                        </div>
-
-                        <div class="col-md-12 col-lg-6">
-                            <input type="email" placeholder="Your e-mail">
-                        </div>
-
-                        <div class="col-md-12 col-lg-3">
-                            <input class="btn gradient-bg" type="submit" value="Subscribe">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
