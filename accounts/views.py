@@ -70,10 +70,9 @@ def account_register(request):
         if form.is_valid():
             user = form.save()
             
-            
             messages.success(request, "Account created successfully")
             login(request, user)
-            return redirect(reverse("applicationDashboard"))
+            return redirect(reverse(""))
         else:
             error = form.errors
             messages.error(request, error)
