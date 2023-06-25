@@ -1,0 +1,22 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+{% include 'dashboard/head.html' %}
+
+<body>
+    {% include 'dashboard/sidebar.html' %}
+    <!-- End Left menu area -->
+    <!-- Start Welcome area -->
+    <div class="all-content-wrapper">
+        {% include 'dashboard/navbar.html' %}
+            <!-- Mobile Menu end -->
+            {% block content %}
+            {% endblock content %}
+
+        {% include 'dashboard/footer.html' %}
+    </div>
+
+    {% include 'dashboard/js.html' %}
+</body>
+
+</html>

@@ -69,7 +69,7 @@ def account_register(request):
             user = form.save()
             print(user)
             messages.success(request, "Account created successfully")
-            print("Account creation was successful")
+            print("Account creation was successfull")
             login(request, user)
             return redirect(reverse("home"))
         else:
