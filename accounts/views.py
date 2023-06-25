@@ -37,21 +37,19 @@ def account_login(request):
     context = {}
     if request.method == 'POST':
         
+        # email = request.POST.get("email")
+        # password = request.POST.get("password")
+        
+        # print(email, password)
         user = EmailBackend.authenticate(request, username=request.POST.get(
             'email'), password=request.POST.get('password'))
-        
+        print(user)
         if user != None:
             login(request, user)
             if user.is_superuser:
-                messages.success(request, "You are logged in as an admin")
-                return redirect(reverse("viewTenants"))     
+                return redirect(reverse("home"))     
             else:
-                if user.level == None:
-                    messages.success(request, "You are logged in as an applicant")
-                    return redirect(reverse("applicationDashboard"))
-                else:
-                    messages.success(request, "You are logged in as an applicant")
-                    return redirect(reverse("applicant_dashbord"))
+                return redirect(reverse("home"))   
         else:
             messages.error(request, "User not found")
             return redirect("/")

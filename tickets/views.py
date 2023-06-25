@@ -133,10 +133,12 @@ def verify_payment(request, ref: str) -> HttpResponse:
     verified = payment.verify_payment()
     
     if verified:
+        messages.success(request, "Ticket reservation was successful! Please wait while we process your sms and email.")
         Ticket.objects.filter(ref=ref).update(registration_id=registration_id)
         first_name = payment.name.split(" ")[0]
-        send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
-        send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
+        #send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
+        #send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
+        
     
     
     return redirect('/')
