@@ -67,15 +67,17 @@ def account_register(request):
         form = UserForm(request.POST or None)
         if form.is_valid():
             user = form.save()
-            
+            print(user)
             messages.success(request, "Account created successfully")
+            print("Account creation was successful")
             login(request, user)
-            return redirect(reverse(""))
+            return redirect(reverse("home"))
         else:
             error = form.errors
+            print(error)
             messages.error(request, error)
             
-    return render(request, "accounts/login.html")
+    return render(request, "accounts/login.html", {'form': form})
 
 
  
