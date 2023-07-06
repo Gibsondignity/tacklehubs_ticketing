@@ -1,22 +1,51 @@
-<!doctype html>
-<html class="no-js" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-{% include 'dashboard/head.html' %}
 
 <body>
-    {% include 'dashboard/sidebar.html' %}
-    <!-- End Left menu area -->
-    <!-- Start Welcome area -->
-    <div class="all-content-wrapper">
-        {% include 'dashboard/navbar.html' %}
-            <!-- Mobile Menu end -->
-            {% block content %}
-            {% endblock content %}
+  {% include 'dashboard/head.html' %}
 
+  <div class="container-scroller"> 
+    <!-- partial:partials/_navbar.html -->
+
+
+    {% comment %} Navbar {% endcomment %}
+    {% include 'dashboard/navbar.html' %}
+
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_settings-panel.html -->
+      {% comment %} Settings Pannel {% endcomment %}
+      {% comment %} {% include 'dashboard/settings.html' %} {% endcomment %}
+
+
+      {% comment %} Partial Sidebar {% endcomment %}
+      {% comment %} <!-- partial --> {% endcomment %}
+      {% include 'dashboard/sidebar.html' %}
+
+      <div class="main-panel">
+        
+        <!-- content-wrapper ends -->
+
+        {% block content %}
+        {% endblock content %}
+        <!-- partial:partials/_footer.html -->
+
+
+        {% comment %} { footer } {% endcomment %}
         {% include 'dashboard/footer.html' %}
-    </div>
 
-    {% include 'dashboard/js.html' %}
+
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  {% include 'dashboard/js.html' %}
 </body>
 
 </html>
+

@@ -1,49 +1,21 @@
 {% load static %}
-<!-- jquery
-		============================================ -->
-        <script src="{% static 'dashboard/js/vendor/jquery-1.12.4.min.js' %}"></script>
-        <!-- bootstrap JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
-        <!-- wow JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/wow.min.js' %}"></script>
-        <!-- price-slider JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/jquery-price-slider.js' %}"></script>
-        <!-- meanmenu JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/jquery.meanmenu.js' %}"></script>
-        <!-- owl.carousel JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/owl.carousel.min.js' %}"></script>
-        <!-- sticky JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/jquery.sticky.js' %}"></script>
-        <!-- scrollUp JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/jquery.scrollUp.min.js' %}"></script>
-        <!-- mCustomScrollbar JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/scrollbar/jquery.mCustomScrollbar.concat.min.js' %}"></script>
-        <script src="{% static 'dashboard/js/scrollbar/mCustomScrollbar-active.js' %}"></script>
-        <!-- metisMenu JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/metisMenu/metisMenu.min.js' %}"></script>
-        <script src="{% static 'dashboard/js/metisMenu/metisMenu-active.js' %}"></script>
-        <!-- tab JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/tab.js' %}"></script>
-        <!-- icheck JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/icheck/icheck.min.js' %}"></script>
-        <script src="{% static 'dashboard/js/icheck/icheck-active.js' %}"></script>
-        <!-- plugins JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/plugins.js' %}"></script>
-        <!-- main JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/main.js' %}"></script>
-        <!-- tawk chat JS
-            ============================================ -->
-        <script src="{% static 'dashboard/js/tawk-chat.js' %}"></script>
+<!-- plugins:js -->
+<script src="{% static 'dashboard/vendors/js/vendor.bundle.base.js' %}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="{% static 'dashboard/vendors/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'dashboard/vendors/progressbar.js/progressbar.min.js' %}"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="{% static 'dashboard/js/off-canvas.js' %}"></script>
+<script src="{% static 'dashboard/js/hoverable-collapse.js' %}"></script>
+<script src="{% static 'dashboard/js/template.js' %}"></script>
+<script src="{% static 'dashboard/js/settings.js' %}"></script>
+<script src="{% static 'dashboard/js/todolist.js' %}"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="{% static 'dashboard/js/dashboard.js' %}"></script>
+<script src="{% static 'dashboard/js/Chart.roundedBarCharts.js' %}"></script>
+<!-- End custom js for this page-->
