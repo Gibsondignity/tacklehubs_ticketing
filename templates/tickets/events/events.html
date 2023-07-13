@@ -51,7 +51,7 @@
                     </div>
                 </header>
                 
-                <a href="{% url 'event' event.id event.slug %}">
+                {% comment %} <a href="{% url 'event' event.id event.slug %}">
                     <footer class="entry-footer">
                         
                         <button class="rounded-button" style="
@@ -64,7 +64,7 @@
                         font-size: 16px;
                         ">Buy Tikets</button>
                     </footer>
-                </a>
+                </a> {% endcomment %}
             </div>
 
         </div>

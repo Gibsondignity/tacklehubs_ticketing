@@ -1,8 +1,9 @@
 {% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <footer class="site-footer">
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12" style="color:#fff">
                 <figure class="footer-logo">
                     <a href="#"><img src="{% static 'images/tacklehubs_logo.png' %}" alt="logo"></a>
                 </figure>
@@ -12,7 +13,7 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="/#about-us">About us</a></li>
                         <li><a href="#">Contact</a></li>
-                        <li><a href="#">Login / Register</a></li>
+                        <li><a href="{% url 'login' %}">Login / Register</a></li>
                     </ul>
                 </nav>
 
@@ -22,11 +23,11 @@
 
                 <div class="footer-social">
                     <ul class="flex flex-wrap justify-content-center align-items-center">
-                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                         <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                         <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                         <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
                     </ul>
                 </div>
             </div>
