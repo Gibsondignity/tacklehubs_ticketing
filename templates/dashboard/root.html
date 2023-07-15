@@ -43,8 +43,64 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
+  {% block modal %}
+  {% endblock modal %}
 
   {% include 'dashboard/js.html' %}
+
+  <script>
+
+    $(".closemodal").on("click", function(){
+      //$(this).preventDefault();
+      console.log("Clicked");
+      $("#addnew").modal("hide");
+      
+  })
+
+  </script>
+
+  {% if messages %}
+      {% for message in messages  %}
+
+        <script>
+            toastr.{{ message.tags }}('{{ message }}', '{{ message.tags|title }}');
+        </script>
+
+      {% endfor %}
+
+  {% endif %}
+
+
+
+  <script>
+    $(function () {
+      $('#example1').DataTable()
+      var bookTable = $('#booklist').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false,
+        'responsive'  : true,
+        'columnDefs': [
+          { "orderable": false, "targets": 0 }
+        ],
+        
+
+      })
+  
+      $('#searchBox').on('keyup', function(){
+        bookTable.search(this.value).draw();
+    });
+  
+    })
+    
+  </script> 
+  
+
+  {% block script %}
+  {% endblock script %}
 </body>
 
 </html>
