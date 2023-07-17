@@ -36,33 +36,60 @@
 
 
     <div class="col-lg-12 grid-margin stretch-card mt-3"> 
+      
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Event Categories</h4>
         
         <div class="table-responsive">
-          <table class="table table-bordered" id="example1">
+          
+            {% if messages %}
+            {% for message in messages  %}
+      
+              <center>
+                {% if message.tags == "success" %}
+                  <p style="color:green; font-size:1.5rem">{{ message }}</p>
+                {% else %}
+                  <p style="color: red; font-size:1.5rem">{{ message }}</p>
+                {% endif %}
+              </center>
+      
+            {% endfor %}
+      
+            {% endif %}
+      
+          <table class="table " id="example1">
             
             <thead>
               <tr>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Event</th>
+                <th>Event Name</th>
+                <th>Event Date</th>
+                <th>Event Time</th>
+                {% comment %} <th>Description</th> {% endcomment %}
+                <th>Startng Price</th>
+                <th>Location</th>
+                <th>Status</th>
                 <th>Date Created</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="">category_name</td>
-                <td>price</td>
-                <td>event</td>
-                <td>May 15, 2015</td>
-                <td>
-                    <button class=' btn-info btn-sm edit btn-flat' data-id='{{ bankaccount.id }}'><i class='mdi mdi-table-edit'></i></button>
-                    <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ bankaccount.id }}'><i class='mdi mdi-delete'></i> </button>
-                </td>
-              </tr>
+                {% for event in events %}
+                    <tr>
+                        <td class="">{{event.event_name}}</td>
+                        <td>{{event.event_date}}</td>
+                        <td>{{event.event_time}}</td>
+                        {% comment %} <td>{{event.description}}</td> {% endcomment %}
+                        <td>{{event.starting_price}}</td>
+                        <td>{{event.location}}</td>
+                        <td>{{event.status}}</td>
+                        <td>{{event.date_created}}</td>
+                        <td>
+                            <button class=' btn-info btn-sm edit btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-table-edit'></i></button>
+                            <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-delete'></i> </button>
+                        </td>
+                    </tr>
+                {% endfor %}
               
             </tbody>
           </table>

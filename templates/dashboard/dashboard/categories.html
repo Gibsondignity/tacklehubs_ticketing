@@ -41,7 +41,7 @@
         <h4 class="card-title">Event Categories</h4>
         
         <div class="table-responsive">
-          <table class="table table-bordered" id="example1">
+          <table class="table " id="example1">
             
             <thead>
               <tr>
@@ -53,27 +53,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="">category_name</td>
-                <td>price</td>
-                <td>event</td>
-                <td>May 15, 2015</td>
-                <td>Edit</td>
-              </tr>
-              <tr>
-                <td class="">category_name</td>
-                <td>price</td>
-                <td>event</td>
-                <td>May 15, 2015</td>
-                <td>Edit</td>
-              </tr>
-              <tr>
-                <td class="">category_name</td>
-                <td>price</td>
-                <td>event</td>
-                <td>May 15, 2015</td>
-                <td>Edit</td>
-              </tr>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{category.category_name}}</td>
+                        <td>{{category.price}}</td>
+                        <td>{{category.event}}</td>
+                        <td>{{category.date_updated}}</td>
+                        <td>
+                            <button class=' btn-info btn-sm edit btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-table-edit'></i></button>
+                            <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-delete'></i> </button>
+                        </td>
+                    </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>

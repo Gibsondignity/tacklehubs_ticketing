@@ -27,7 +27,8 @@ class Event(models.Model):
     starting_price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     picture = FileField(upload_to='gallery', blank=True, null=True)
     location = models.CharField(max_length=65, null=True, blank=True)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(blank=True, null=True)
+    status = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now=True)
     date_updated = models.DateTimeField(auto_now_add=True)
     
