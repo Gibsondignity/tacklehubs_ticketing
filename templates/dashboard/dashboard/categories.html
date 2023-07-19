@@ -116,30 +116,69 @@
 
   {% comment %} Edit Modal {% endcomment %}
 
-  <div class="modal fade" id="addnew">
+  <div class="modal fade" id="edit">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title"><b>Add New Category</b></h4>
+              <h4 class="modal-title"><b>Edit Category</b></h4>
             </div>
             <div class="modal-body">
               <form class="form-horizontal" method="POST" action="{% url 'updateEvent' %}">
                 {% csrf_token %}
 
-                    {% for field in form  %}
-                    <div class="form-group has-feedback">
-                        <span class="text-danger">{{field.errors}}</span>
-                        {{field.label_tag}}
-                        {{field}}
-                    </div>
-                    {% endfor %}
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Event Time</label>
+                  <input type="time" class="form-control" id="event_time" name="event_time" placeholder="">
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Description</label>
+                  <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Starting Price</label>
+                  <input type="text" class="form-control" id="starting_price" name="starting_price" placeholder="">
+                </div>
   
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
               <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% comment %} Delete Modal {% endcomment %}
+
+  <div class="modal fade" id="delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><b>Delete Event</b></h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'deleteEvents' %}">
+                {% csrf_token %}
+                Are you sure want to delete this event?
+                
+                <input type="hidden" id="id" class="id" name="id">
+                <br><br>
+                <center><p style="color: red; font-size: 1rem" type="text" id="category_name" class="category_name" ></p></center>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Delete</button>
             </div>
           </form>
         </div>
