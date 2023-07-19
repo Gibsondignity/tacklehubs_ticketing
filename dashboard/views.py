@@ -71,6 +71,7 @@ def updateEvent(request):
 
 
 
+
 def deleteEvents(request):
     
     id = request.POST.get('id')
@@ -83,6 +84,18 @@ def deleteEvents(request):
     
     return redirect(reverse("dashboard_events"))
 
+
+def deleteCategory(request):
+    
+    id = request.POST.get('id')
+    event = Event.objects.filter(id=int(id)).first()
+    try:
+        event.delete() 
+        messages.success(request, "Event deleted successfully!")
+    except event.DoesNotExist():
+        messages.error(request, "There was an error deleteing this event!")
+    
+    return redirect(reverse("dashboard_events"))
 
 
 
