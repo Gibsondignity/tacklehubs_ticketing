@@ -45,24 +45,44 @@ def events(request):
 
 
 
-# def updateEvent(request):
-#     if request.method != "POST":
-#         messages.error(request, "Access Denied")
-#     if request.method == "POST":
-#         tenant_id = request.POST.get("id", None)
-#         status = request.POST.get("status", None)
-#         comment = request.POST.get("comment", None)
+def updateEvent(request):
+    if request.method != "POST":
+        messages.error(request, "Access Denied")
+    if request.method == "POST":
+        id = request.POST.get("id", None) 
+        print(id)
+        image = request.POST.get('picture') 
+        event = Event.objects.filter(id=int(id)).first()
+        form = EventForm(request.POST or None, instance=event)
         
-#         tenant = Application.objects.filter(id=tenant_id)
-#         if not tenant.exists():
-#             messages.error(request, "Application does not exist")
-#         else:
-#             tenant = tenant[0]
-#             tenant.status = status
-#             tenant.comment = comment
-#             tenant.save()
-            
-#     return redirect(reverse("viewTenants"))
+        if form.is_valid():
+            form.save(commit=False)
+            if image:
+                event.picture = image
+                event.save()
+            form.save()   
+        else :
+            for error in  form.errors:
+                print(error)
+              
+
+    return redirect(reverse("dashboard_events"))
+
+
+
+
+def deleteEvents(request):
+    
+    id = request.POST.ge('id')
+    event = Event.objects.filter(id=int(id)).first()
+    try:
+        event.delete() 
+    except event.DoesNotExist():
+        messages.error("There was an error deleteing this event!")
+    
+    return redirect(reverse("dashboard_events"))
+
+
 
 
 
@@ -75,13 +95,15 @@ def getEvents(request):
         print(event)
         context['id'] = event.id
         context['event_name'] = event.event_name
+        context['event_date'] = event.event_date
         context['event_time'] = event.event_time
         context['description'] = event.description
         context['starting_price'] = event.starting_price
         context['location'] = event.location
-        context['picture'] = event.picture.url
+        context['picture'] = "http://localhost:8000" + event.picture.url
     except:
         messages.error(request, "There was an error fetching data!")
+        
     print(context)
     return JsonResponse(context)
     

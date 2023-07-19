@@ -10,5 +10,9 @@ urlpatterns = [
     
     path('getEvents', views.getEvents, name='getEvents'),
     path('getCategories', views.getCategories, name='getCategories'),
+    
+    
+    path('updateEvent', views.updateEvent, name='updateEvent'),
+    path('deleteEvents', views.deleteEvents, name='deleteEvents'),
     #path('about/',views.about
 ]

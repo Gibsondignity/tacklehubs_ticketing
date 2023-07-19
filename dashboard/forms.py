@@ -41,6 +41,6 @@ class EventForm(ModelForm):
             'event_time': forms.TimeInput(attrs={'class': 'form-control', 'required': 'True', 'type':'time'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'required': 'True' }),
             'starting_price': forms.NumberInput(attrs={'class': 'form-control', 'required': 'True'}),
-            'picture': forms.FileInput(attrs={'class': 'form-control', 'required':'True'}),
+            'picture': forms.FileInput(attrs={'class': 'form-control', 'required':'True', 'accept':"image/*"}),
             'location': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
         }
