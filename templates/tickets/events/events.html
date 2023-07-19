@@ -3,7 +3,33 @@
 
 
 {% block content %}
+<style>
+    .event-name{
+    max-width: 15ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;"
+    
+    }
+
+    .single-event{
+        border: 1px solid #fff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        margin:10px;
+        padding: 10px
+    }
+
+    .event-location{
+    max-width: 20ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;"
+    }
+
+</style>
 {% include 'tickets/events/header.html' %}
+
+
 
 <form class="events-search">
     <div class="container">
@@ -31,49 +57,32 @@
     <div class="row events-list">
         
         {% for event in events %}
-        <div class="col-12 col-lg-4 single-event" sytle = "padding: 50px; overflow: hidden; border: 2px solid; box-shadow: 5px 10px; top: 400px">
-            
-            <a href="{% url 'event' event.pk event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100%"></a>
+        <div class="col-12 col-lg-3 single-event" >
+                    
+            <a href="{% url 'event' event.pk event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100%" height="300px"></a>
 
             <div class="event-content-wrap">
                 <header class="entry-header flex justify-content-between">
                     <div>
-                        <h2 class="entry-title"><a href="{% url 'event' event.pk event.slug %}">{{event.event_name}}</a></h2>
+                        <h2 class="entry-title event-name" style="font-size: 18px;>
+                        <a href="{% url 'event' event.pk event.slug %}">{{event.event_name}}</a></h2>
 
-                        <div class="event-location"><a href="{% url 'event' event.pk event.slug %}">{{ event.location }}</a></div>
+                        <div class="event-location" style="font-size: 12px"><a href="{% url 'event' event.pk event.slug %}">{{ event.location }}</a></div>
 
-                        <div class="event-date">{{ event.event_date }} @ {{ event.event_time }}</div>
+                        <div class="event-date" style="font-size: 12px">{{ event.event_date }} @ {{ event.event_time }}</div>
                     </div>
                     
 
-                    <div class="event-cost flex justify-content-center align-items-center">
-                    <b> GH₵ <span>{{event.starting_price}}+</span></b>
+                    <div class="event-cost flex justify-content-center align-items-center" style="font-size: 12px">
+                    <b> ₵ <span>{{event.starting_price}}+</span></b>
                     </div>
                 </header>
-                
-                {% comment %} <a href="{% url 'event' event.id event.slug %}">
-                    <footer class="entry-footer">
-                        
-                        <button class="rounded-button" style="
-                        border-radius: 20px; 
-                        padding: 10px 20px; 
-                        background-color: #9244BF;
-                        color: #fff;
-                        border: none; 
-                        cursor: pointer; 
-                        font-size: 16px;
-                        ">Buy Tikets</button>
-                    </footer>
-                </a> {% endcomment %}
+
             </div>
 
         </div>
 
         {% endfor %}
-
-
-        
- 
     </div>
 
     <br><br><br>
@@ -101,26 +110,20 @@
                     <div class="upcoming-events-list">
                         {% for event in upcomming_events %}
                         <div class="upcoming-event-wrap flex flex-wrap justify-content-between align-items-center">
-                            {% comment %} <figure class="events-thumbnail"> {% endcomment %}
-                                <a href="{% url 'event' event.id event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100px"></a>
-                            {% comment %} </figure> {% endcomment %}
+                                <a href="{% url 'event' event.id event.slug %}"><img src={{media_url}}{{event.picture}} alt="" width="100px" height="70px"></a>
 
                             <div class="entry-meta">
-                                <div class="event-date">
-                                    {{event.event_date}}<span></span>
+                                <div class="event-date" style="font-size: 12px">
+                                    {{event.event_date}} @ {{event.event_time}} <span></span>
                                 </div>
                             </div>
 
                             <header class="entry-header">
-                                <h3 class="entry-title"><a href="{% url 'event' event.id event.slug %}">{{event.event_name}}</a></h3>
-
-                                <div class="event-date-time">{{event.event_date}} @ {{event.event_time}} </div>
-
-                                {% comment %} <div class="event-speaker">Speackers: Maria Williams, Luis Smith, James Doe</div> {% endcomment %}
+                                <h3 class="entry-title" style="font-size: 16px"><a href="{% url 'event' event.id event.slug %}">{{event.event_name}}</a></h3>
                             </header>
 
                             <footer class="entry-footer">
-                                <a href="{% url 'event' event.id event.slug %}">Buy Tikets</a>
+                                <a href="{% url 'event' event.id event.slug %}" style="font-size: 14px">Buy Tikets</a>
                             </footer>
                         </div>
                         {% endfor %}

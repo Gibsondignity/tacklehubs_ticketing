@@ -31,7 +31,8 @@
             </div>
           </div>
         </div>
-    </div>
+    </div> 
+
 
 
 
@@ -60,8 +61,8 @@
                         <td>{{category.event}}</td>
                         <td>{{category.date_updated}}</td>
                         <td>
-                            <button class=' btn-info btn-sm edit btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-table-edit'></i></button>
-                            <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-delete'></i> </button>
+                            <button class=' btn-info btn-sm edit btn-flat' data-id='{{ category.id }}'><i class='mdi mdi-table-edit'></i></button>
+                            <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ category.id }}'><i class='mdi mdi-delete'></i> </button>
                         </td>
                     </tr>
               {% endfor %}
@@ -115,6 +116,41 @@
 
 
 
+  {% comment %} Edit Modal {% endcomment %}
+
+  <div class="modal fade" id="addnew">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><b>Add New Category</b></h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" method="POST" action="#">
+                {% csrf_token %}
+               
+                <div class="modal-body">
+                    {% for field in form  %}
+                    <div class="form-group has-feedback">
+                        <span class="text-danger">{{field.errors}}</span>
+                        {{field.label_tag}}
+                        {{field}}
+                    </div>
+                    {% endfor %}
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 {% endblock modal %}
 
 
@@ -124,13 +160,42 @@
 
     $(".addnew").on("click", function(){
         //$(this).preventDefault();
-        console.log("Clicked");
         $("#addnew").modal("show");
+    })
+
+    
+    $(".edit").on("click", function(){
+      //$(this).preventDefault();
+      id = $(this).val()
+      console.log(id)
+      $("#edit").modal("show");
         
     })
 
     
+    $(".delete").on("click", function(){
+      //$(this).preventDefault();
+      $("#delete").modal("show");
+        
+    })
 
+    function getRow(id) {
+      $.ajax({
+          type: 'GET',
+          url: "{% url 'getCategories' %}",
+          data: {
+              id: id
+          },
+          dataType: 'json',
+          success: function(response) {
+              $('.id').val(response.id);
+              $('.account_number').html(response.account_number);
+              $('.account_name').val(response.account_name);
+              
+              console.log(response);
+          }
+      });
+  }
 
 
 

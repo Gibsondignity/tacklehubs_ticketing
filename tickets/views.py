@@ -18,16 +18,27 @@ import decimal
 def home(request):
     
     
+#     today = datetime.now().date()
+
+# # Calculate the date range for the next 20 days
+#     end_date = today + timedelta(days=20)
+#     events = Event.objects.filter(event_date__gte = today)
+        
+#     upcomming_events = Event.objects.filter(event_date__range=[today, end_date]) 
+    
+#     media_url = "http://127.0.0.1:8000/media/"
+#     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
+
     today = datetime.now().date()
 
-# Calculate the date range for the next 20 days
+    # Calculate the date range for the next 20 days
     end_date = today + timedelta(days=20)
     events = Event.objects.filter(event_date__gte = today)
-        
-    upcomming_events = Event.objects.filter(event_date__range=[today, end_date]) 
     
+    upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     media_url = "http://127.0.0.1:8000/media/"
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
+    
     
     return render(request, 'tickets/home/home.html', context)
 
