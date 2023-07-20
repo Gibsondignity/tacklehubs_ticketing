@@ -93,13 +93,21 @@
             <div class="modal-body">
               <form class="form-horizontal" method="POST" action="#">
                 {% csrf_token %}
-                    {% for field in form  %}
-                    <div class="form-group has-feedback">
-                        <span class="text-danger">{{field.errors}}</span>
-                        {{field.label_tag}}
-                        {{field}}
+                    
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Category Name</label>
+                      <input type="text" class="form-control" id="id_category_name" name="category_name" placeholder="">
                     </div>
-                    {% endfor %}
+    
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Price</label>
+                      <textarea class="form-control" id="id_price" name="price" rows="4"></textarea>
+                    </div>
+    
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Starting Price</label>
+                      <input type="text" class="form-control" id="starting_price" name="starting_price" placeholder="">
+                    </div>
   
             </div>
             <div class="modal-footer">

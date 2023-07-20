@@ -51,15 +51,15 @@ def updateEvent(request):
     if request.method == "POST":
         id = request.POST.get("id", None) 
         print(id)
-        image = request.POST.get('picture') 
+        image = request.FILES.get('picture') 
         event = Event.objects.filter(id=int(id)).first()
-        form = EventForm(request.POST or None, instance=event)
+        form = EventForm(request.POST or None, request.FILES or None, instance=event)
         
         if form.is_valid():
             form.save(commit=False)
             if image:
-                event.picture = image
-                event.save()
+                form.picture = image
+                
             form.save()   
         else :
             for error in  form.errors:
@@ -133,7 +133,6 @@ def getCategories(request):
         context['id'] = category.id
         context['category_name'] = category.category_name
         context['price'] = category.price
-        context['user_id'] = category.user_id
         context['date_created'] = category.date_created
     except:
         messages.error(request, "There was an error fetching data!")

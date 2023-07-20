@@ -1268,7 +1268,6 @@ a:hover, a:active {
 .upcoming-events-outer {
     padding: 400px 0 120px;
     margin-top: -200px;
-    background: url("images/upcoming-events-bg.jpg") no-repeat;
     background-size: cover;
 }
 
