@@ -3,16 +3,21 @@ from . import views
 
 
 urlpatterns = [
+    # main views
     path('dashboard', views.dashboard, name='dashboard'),
     path('categories', views.categories, name='categories'),
     path('events', views.events, name='dashboard_events'),
     
-    
+    # Get Views
     path('getEvents', views.getEvents, name='getEvents'),
     path('getCategories', views.getCategories, name='getCategories'),
     
-    
+    # Upadate
     path('updateEvent', views.updateEvent, name='updateEvent'),
+    path('updateCategory', views.updateCategory, name='updateCategory'),
+    
+    
+    # delete
     path('deleteEvents', views.deleteEvents, name='deleteEvents'),
-    #path('about/',views.about
+    path('deleteCategory', views.deleteCategory, name='deleteCategory'),
 ]
