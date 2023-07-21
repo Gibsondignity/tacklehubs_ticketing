@@ -41,7 +41,7 @@ def updateEvent(request):
         messages.error(request, "Access Denied")
     if request.method == "POST":
         id = request.POST.get("id", None) 
-        print(id)
+        #print(id)
         image = request.FILES.get('picture') 
         event = Event.objects.filter(id=int(id)).first()
         form = EventForm(request.POST or None, request.FILES or None, instance=event)
@@ -57,7 +57,7 @@ def updateEvent(request):
             messages.error(request, "There was an error updating event")
               
 
-    return redirect(reverse("categories"))
+    return redirect(reverse("dashboard_event"))
 
 
 
@@ -83,7 +83,7 @@ def getEvents(request):
     try:
         event = Event.objects.get(id=int(id))
         # event = Event.objects.all().values()[int(id)]
-        print(event)
+        #print(event)
         context['id'] = event.id
         context['event_name'] = event.event_name
         context['event_date'] = event.event_date
@@ -95,7 +95,7 @@ def getEvents(request):
     except:
         messages.error(request, "There was an error fetching data!")
         
-    print(context)
+    #print(context)
     return JsonResponse(context)
     
     
@@ -133,9 +133,11 @@ def updateCategory(request):
     if request.method == "POST":
         id = request.POST.get("id", None) 
         event = Event.objects.filter(id=int(id)).first()
+        print(event)
         form = CategoryForm(request.POST or None, instance=event)
-        
+        #print(form)
         if form.is_valid():
+            
             form.save()
             messages.success(request, "Category updated succcessfully!")
         else :
@@ -178,7 +180,7 @@ def getCategories(request):
     except:
         messages.error(request, "There was an error fetching data!")
     
-    print(context)
+    #print(context)
     
     return JsonResponse(context)
     

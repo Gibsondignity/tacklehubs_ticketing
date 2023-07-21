@@ -95,17 +95,17 @@
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="exampleInputPassword1">Category Name</label>
-                  <input type="text" class="form-control" id="category_name" name="category_name" placeholder="">
+                  <input type="text" class="form-control" id="id_category_name" name="category_name" placeholder="">
                 </div>
 
                 <div class="form-group">
                   <label for="exampleInputPassword1">Price</label>
-                  <input class="form-control" type="number" id="price" name="price" class="price">
+                  <input class="form-control" type="number" name="price" id="id_price">
                 </div>
 
                 <div class="form-group">
                   <label for="exampleInputPassword1">Event</label>
-                  <select name="event" id="bank" class="form-control bank">
+                  <select name="event" id="id_event" class="form-control event">
                     {%  for event in events %}
                       <option value="{{event.id}}">{{event.event_name}}</option>
                     {% endfor %}
@@ -139,14 +139,15 @@
               <form class="form-horizontal" method="POST" action="{% url 'updateCategory' %}">
                 {% csrf_token %}
 
+                <<input type="hidden" id="id" class="id" name="id">
                 <div class="form-group">
                   <label for="exampleInputPassword1">Category Name</label>
-                  <input type="text" class="form-control" id="category_name" name="category_name" class="category_name" placeholder="">
+                  <input type="text" class="form-control" id="category_name" name="category_name"  placeholder="">
                 </div>
 
                 <div class="form-group">
                   <label for="exampleInputPassword1">Price</label>
-                  <input class="form-control" type="number" id="price" name="price" class="price">
+                  <input class="form-control" type="number" class="price" id="price" name="price">
                 </div>
 
                 <div class="form-group">
@@ -188,7 +189,7 @@
                 
                 <input type="hidden" id="id" class="id" name="id">
                 <br><br>
-                <center><p style="color: red; font-size: 1rem" type="text" id="category_name" class="category_name" ></p></center>
+                <center><p style="color: red; font-size: 1rem" type="text" class="category_name" ></p></center>
 
             </div>
             <div class="modal-footer">
@@ -216,20 +217,18 @@
 
     
     $(".edit").on("click", function(){
-    
       id = $(this).data('id')
       getRow(id)
-      $("#edit").modal("show");
-        
+      $("#edit").modal("show");   
     })
 
     
     $(".delete").on("click", function(){
       id = $(this).data('id')
       getRow(id)
-      $("#delete").modal("show");
-        
+      $("#delete").modal("show"); 
     })
+
 
     function getRow(id) {
       $.ajax({
@@ -241,12 +240,13 @@
           dataType: 'json',
           success: function(response) {
               $('.id').val(response.id);
-              $('.category_name').val(response.category_name);
+              console.log(response.category_name)
               $('.category_name').html(response.category_name);
-              $('.event').val(response.event);
-              $('.price').val(response.price);
+              $('#category_name').val(response.category_name);
+              $('#event').val(response.event);
+              $('#price').val(response.price);
               
-              console.log(response);
+              //console.log(response);
           }
       });
   }
