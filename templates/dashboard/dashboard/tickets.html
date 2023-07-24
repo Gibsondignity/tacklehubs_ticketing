@@ -2,6 +2,53 @@
 
 {% block content %}
 
+<style>
+    .content{
+      padding: 20px;
+      }
+      
+      .collapse-button {
+        background-color: #4CAF50; /* Green background */
+        color: white; /* White text */
+        padding: 14px 20px; /* Some padding */
+        border: none; /* No border */
+        cursor: pointer; /* Add a pointer cursor on hover */
+      }
+      
+      .collapse-content {
+        display: none; /* Hide the content by default */
+      }
+
+
+      input, select{
+        //border: 1px solid #962A5A;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 8px;
+      }
+
+      input[type="date"] {
+        //background-color: #962A5A;
+        outline: none;
+        color: #000;
+      }
+      
+      input[type="date"]::-webkit-clear-button {
+        font-size: 18px;
+        height: 30px;
+        position: relative;
+      }
+      
+      input[type="date"]::-webkit-inner-spin-button {
+        height: 28px;
+      }
+      
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        font-size: 15px;
+      
+      }
+    </style>
+
 <div class="content-wrapper">
     <div class="row">
         <div class="col-sm-12">
@@ -41,14 +88,46 @@
       <div class="card-body">
         <h4 class="card-title">Event Categories</h4>
         
+        <form method="POST" action="">
+            <label for="from_date">From Date:</label>
+            <input type="date" id="from_date">
+            <label for="to_date">To Date:</label>
+            <input type="date" id="to_date">
+            <select id="companylocation" >
+              <option value="" placeholder="Company Location">Company Location</option>
+              {% for companylocation in companylocations %}
+              <option value="{{ companylocation.id }}">{{ companylocation.name }}</option>
+              {% endfor %}
+            </select>
+      
+            <select id="sale_type" >
+              <option value="" placeholder="Company Location">Sale Type</option>
+              <option value="wholesale">Wholesale</option>
+              <option value="Cash Sale">Cash Sale</option>
+              <option value="Credit Sale">Credit Sale</option>
+            </select>
+            <input type="text" id="sale_id" placeholder="Sale ID">  
+      
+            <select id="user" >
+              <option value="" placeholder="User">User</option>
+              {% for user in users %}
+              <option value="{{ user.id }}">{{ user.username }}</option>
+              {% endfor %}
+            </select>
+          </form>
+
+
         <div class="table-responsive">
           <table class="table " id="example1">
             
             <thead>
               <tr>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Event</th>
+                <th>Phone Number</th>	
+                <th>Name</th>	
+                <th>Email</th>	
+                <th>Registration ID</th> 
+                <th>Reference</th>	
+                <th>Verify</th>	
                 <th>Date Created</th>
 
               </tr>
@@ -59,6 +138,9 @@
                         <td>{{category.category_name}}</td>
                         <td>{{category.price}}</td>
                         <td>{{category.event}}</td>
+                        <td>{{category.date_updated}}</td>
+                        <td>{{category.date_updated}}</td>
+                        <td>{{category.date_updated}}</td>
                         <td>{{category.date_updated}}</td>
                         
                     </tr>
