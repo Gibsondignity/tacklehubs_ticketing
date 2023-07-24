@@ -85,8 +85,23 @@
     });
   
     })
+
+
     
   </script> 
+
+
+    
+  <script>
+    {% if messages %}
+        {% for message in messages  %}
+            <script>
+                toastr.{{ message.tags }}('{{ message }}', '{{ message.tags|title }}');
+            </script>
+        {% endfor %}
+    {% endif %}
+  </script>
+  
   
 
   {% block script %}

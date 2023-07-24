@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect, reverse
 from .forms import *
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 # Create your views here.
 
+
+@login_required()
 def dashboard(request):
     
     return render(request, 'dashboard/dashboard/dashboard.html', context={})
@@ -13,7 +16,7 @@ def dashboard(request):
 
 
 # Events 
-
+@login_required()
 def events(request):
     form = EventForm()
     events = Event.objects.all()
@@ -36,6 +39,11 @@ def events(request):
 
 
 
+
+
+
+
+@login_required()
 def updateEvent(request):
     if request.method != "POST":
         messages.error(request, "Access Denied")
@@ -63,6 +71,8 @@ def updateEvent(request):
 
 
 
+
+@login_required()
 def deleteEvents(request):
     
     id = request.POST.get('id')
@@ -77,6 +87,11 @@ def deleteEvents(request):
 
 
 
+
+
+
+
+@login_required()
 def getEvents(request):
     id = request.GET.get('id')
     context = {}
@@ -104,7 +119,7 @@ def getEvents(request):
   
   
 # Categories
-
+@login_required()
 def categories(request):
     form = CategoryForm()
     categories = Category.objects.all()
@@ -127,14 +142,19 @@ def categories(request):
 
 
 
+
+
+
+
+@login_required()
 def updateCategory(request):
     if request.method != "POST":
         messages.error(request, "Access Denied")
     if request.method == "POST":
         id = request.POST.get("id", None) 
-        event = Event.objects.filter(id=int(id)).first()
-        print(event)
-        form = CategoryForm(request.POST or None, instance=event)
+        category = Category.objects.filter(id=int(id)).first()
+        print(category)
+        form = CategoryForm(request.POST or None, instance=category)
         #print(form)
         if form.is_valid():
             
@@ -150,7 +170,7 @@ def updateCategory(request):
 
 
 
-
+@login_required()
 def deleteCategory(request):
     
     id = request.POST.get('id')
@@ -163,7 +183,11 @@ def deleteCategory(request):
     
     return redirect(reverse("categories"))
 
-  
+
+
+
+
+@login_required() 
 def getCategories(request):
     id = request.GET.get('id')
     print(id)
@@ -183,5 +207,17 @@ def getCategories(request):
     #print(context)
     
     return JsonResponse(context)
+
+
+
+
+
+
+# All tickets
+
+def ticket_reservations(request):
+    
+    
+    return render(request, 'dashboard/dashboard/tickets.html')
     
     

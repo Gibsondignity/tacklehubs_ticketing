@@ -20,4 +20,7 @@ urlpatterns = [
     # delete
     path('deleteEvents', views.deleteEvents, name='deleteEvents'),
     path('deleteCategory', views.deleteCategory, name='deleteCategory'),
+    
+    
+    path('ticket_reservations', views.ticket_reservations, name='ticket_reservations')
 ]

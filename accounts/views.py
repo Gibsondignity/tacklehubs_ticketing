@@ -34,25 +34,29 @@ from django.template.loader import get_template
 # DJANGO VIEW
 def account_login(request):
 
-    context = {}
+    form = UserForm()
+    
+    context = {'form':form}
     if request.method == 'POST':
         
-        # email = request.POST.get("email")
-        # password = request.POST.get("password")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
         
-        # print(email, password)
+        print(email, password)
         user = EmailBackend.authenticate(request, username=request.POST.get(
             'email'), password=request.POST.get('password'))
         print(user)
         if user != None:
             login(request, user)
             if user.is_superuser:
-                return redirect(reverse("home"))     
+                messages.error(request, "You're logged in as an admin")
+                return redirect(reverse("dashboard"))     
             else:
-                return redirect(reverse("home"))   
+                messages.error(request, "Login successfull")
+                return redirect(reverse("dashboard"))   
         else:
             messages.error(request, "User not found")
-            return redirect("/")
+            return redirect("login")
     
     return render(request, "accounts/login.html", context)
 
@@ -67,11 +71,9 @@ def account_register(request):
         form = UserForm(request.POST or None)
         if form.is_valid():
             user = form.save()
-            print(user)
             messages.success(request, "Account created successfully")
-            print("Account creation was successfull")
             login(request, user)
-            return redirect(reverse("home"))
+            return redirect(reverse("dashboard"))
         else:
             error = form.errors
             print(error)
