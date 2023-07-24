@@ -142,7 +142,7 @@
               <h4 class="modal-title"><b>Add New Event</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'events' %}">
+              <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'dashboard_events' %}">
                 {% csrf_token %}
               
                     {% for field in form  %}

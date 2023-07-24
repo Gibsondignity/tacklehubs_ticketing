@@ -93,23 +93,18 @@
             <input type="date" id="from_date">
             <label for="to_date">To Date:</label>
             <input type="date" id="to_date">
-            <select id="companylocation" >
-              <option value="" placeholder="Company Location">Company Location</option>
-              {% for companylocation in companylocations %}
-              <option value="{{ companylocation.id }}">{{ companylocation.name }}</option>
-              {% endfor %}
-            </select>
-      
+            
             <select id="sale_type" >
-              <option value="" placeholder="Company Location">Sale Type</option>
-              <option value="wholesale">Wholesale</option>
-              <option value="Cash Sale">Cash Sale</option>
-              <option value="Credit Sale">Credit Sale</option>
+              <option value="" placeholder="Company Location">Event</option>
+              <option value="wholesale">Event 1</option>
+              <option value="Cash Sale">Event 2</option>
+              <option value="Credit Sale">Event 3</option>
             </select>
-            <input type="text" id="sale_id" placeholder="Sale ID">  
+
+            <input type="text" id="sale_id" placeholder="Event ID">  
       
             <select id="user" >
-              <option value="" placeholder="User">User</option>
+              <option value="" placeholder="User">Event Category</option>
               {% for user in users %}
               <option value="{{ user.id }}">{{ user.username }}</option>
               {% endfor %}
@@ -125,6 +120,8 @@
                 <th>Phone Number</th>	
                 <th>Name</th>	
                 <th>Email</th>	
+                <th>Number of Tickets</th>	
+                <th>Amount</th>	
                 <th>Registration ID</th> 
                 <th>Reference</th>	
                 <th>Verify</th>	
@@ -133,17 +130,21 @@
               </tr>
             </thead>
             <tbody>
-                {% for category in categories %}
+                {% for ticket in tickets %}
+                  {% if request.user == ticket.event.user and request.user == ticket.catgory.user %}
                     <tr>
-                        <td>{{category.category_name}}</td>
-                        <td>{{category.price}}</td>
-                        <td>{{category.event}}</td>
-                        <td>{{category.date_updated}}</td>
-                        <td>{{category.date_updated}}</td>
-                        <td>{{category.date_updated}}</td>
-                        <td>{{category.date_updated}}</td>
+                        <td>{{ticket.phone_number}}</td>
+                        <td>{{ticket.name}}</td>
+                        <td>{{ticket.email}}</td>
+                        <td>{{ticket.number_of_tickets}}</td>
+                        <td>{{ticket.amount}}</td>
+                        <td>{{ticket.registration_id}}</td>
+                        <td>{{ticket.ref}}</td>
+                        <td>{{ticket.verify}}</td>
+                        <td>{{ticket.date_created}}</td>
                         
                     </tr>
+                  {% endif %}
               {% endfor %}
             </tbody>
           </table>

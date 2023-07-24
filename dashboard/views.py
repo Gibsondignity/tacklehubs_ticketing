@@ -19,13 +19,21 @@ def dashboard(request):
 @login_required()
 def events(request):
     form = EventForm()
-    events = Event.objects.all()
+    events = Event.objects.filter(user=request.user)
 
-
+    #print(events)
+    for event in events:
+        print(event.user)
+    
     if request.method == "POST":
         form = EventForm(request.POST or None, request.FILES or None)
         if form.is_valid():
-            form.save()
+            
+            user = form.save(commit=False)
+            user.user = request.user
+            
+            user.save()
+            
             messages.success(request, "Event created successfully!")
             return redirect(reverse('dashboard_events'))
         else:
@@ -65,7 +73,7 @@ def updateEvent(request):
             messages.error(request, "There was an error updating event")
               
 
-    return redirect(reverse("dashboard_event"))
+    return redirect(reverse("dashboard_events"))
 
 
 
@@ -83,7 +91,7 @@ def deleteEvents(request):
     except event.DoesNotExist():
         messages.error(request, "There was an error deleteing this event!")
     
-    return redirect(reverse("categories"))
+    return redirect(reverse("dashboard_event"))
 
 
 
@@ -122,14 +130,16 @@ def getEvents(request):
 @login_required()
 def categories(request):
     form = CategoryForm()
-    categories = Category.objects.all()
+    categories = Category.objects.filter(user=request.user)
     
-    events = Event.objects.all()
-    
+    events = Event.objects.filter(user=request.user)
+    print(events)
     if request.method == "POST":
         form = CategoryForm(request.POST or None)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.user = request.user
+            user.save()
             messages.success(request, "Event created successfully!")
             return redirect(reverse('categories'))
         else:
@@ -153,7 +163,7 @@ def updateCategory(request):
     if request.method == "POST":
         id = request.POST.get("id", None) 
         category = Category.objects.filter(id=int(id)).first()
-        print(category)
+        #print(category)
         form = CategoryForm(request.POST or None, instance=category)
         #print(form)
         if form.is_valid():
@@ -190,7 +200,7 @@ def deleteCategory(request):
 @login_required() 
 def getCategories(request):
     id = request.GET.get('id')
-    print(id)
+    #print(id)
     context = {}
     try:
         category = Category.objects.get(id=int(id))
@@ -199,7 +209,7 @@ def getCategories(request):
         context['price'] = category.price
         if category.event:
             context['event'] = category.event.id
-        print(context)
+        #print(context)
         
     except:
         messages.error(request, "There was an error fetching data!")
@@ -218,6 +228,8 @@ def getCategories(request):
 def ticket_reservations(request):
     
     
-    return render(request, 'dashboard/dashboard/tickets.html')
+    tickets = Ticket.objects.all()
+    context = {'tickets':tickets}
+    return render(request, 'dashboard/dashboard/tickets.html', context)
     
     

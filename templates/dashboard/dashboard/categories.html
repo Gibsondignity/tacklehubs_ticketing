@@ -106,6 +106,7 @@
                 <div class="form-group">
                   <label for="exampleInputPassword1">Event</label>
                   <select name="event" id="id_event" class="form-control event">
+                    <option value="">Select Event</option>
                     {%  for event in events %}
                       <option value="{{event.id}}">{{event.event_name}}</option>
                     {% endfor %}
