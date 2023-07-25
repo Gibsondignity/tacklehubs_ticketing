@@ -1,4 +1,5 @@
 from tickets.models import *
+from .models import UssdRequest
 from django import forms
 from django.forms import ModelForm
 
@@ -43,4 +44,20 @@ class EventForm(ModelForm):
             'starting_price': forms.NumberInput(attrs={'class': 'form-control', 'required': 'True'}),
             'picture': forms.FileInput(attrs={'class': 'form-control', 'required':'True', 'accept':"image/*"}),
             'location': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
+        }
+        
+        
+        
+        
+class UssdRequestForm(ModelForm):
+    class Meta:
+        model = UssdRequest
+        fields = (
+            'phoneNumber',
+            'event',
+                )
+        
+        widgets = {
+            'phoneNumber': forms.TextInput(attrs={'class': 'form-control', 'required': True}), 
+            'event': forms.Select(attrs={'class': 'form-control'}),
         }

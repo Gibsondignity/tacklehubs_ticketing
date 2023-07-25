@@ -25,7 +25,7 @@
                 <div class="btn-wrapper">
                     <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
                     <a href="#" class="btn btn-otline-dark"><i class="icon-printer"></i> Print</a>
-                    <a href="#" class="btn btn-primary text-white me-0 addnew"><i class="icon-plus"></i> Add New</a>
+                    <a href="#" class="btn btn-primary text-white me-0 addnew"><i class="icon-plus"></i> Request</a>
                 </div>
                 </div>
             </div>
@@ -39,40 +39,46 @@
     <div class="col-lg-12 grid-margin stretch-card mt-3"> 
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Event Categories</h4>
+        <h4 class="card-title">
+          Request for USSD option
+        </h4>
         
         <div class="table-responsive">
-          <table class="table " id="example1">
+          <p>
+            Please click on the request button at your right upper conrner to request for the USSD option. Terms and Conditions apply. Please, note that, our team will response to your
+            request in two(2) working days. Thank you for using our system.
+          </p>
+          {% comment %} <table class="table " id="example1">
             
             <thead>
               <tr>
-                <th>Category</th>
-                <th>Price</th>
+                <th>Phone Number</th>
                 <th>Event</th>
                 <th>Date Created</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-                {% for category in categories %}
+                {% for ussd_request in ussd_requests %}
+                  {% if request.user == ussd_request.event.user %}
                     <tr>
-                        <td>{{category.category_name}}</td>
-                        <td>{{category.price}}</td>
-                        <td>{{category.event}}</td>
-                        <td>{{category.date_updated}}</td>
+                        <td>{{ussd_request.phoneNumber}}</td>
+                        <td>{{ussd_request.event}}</td>
+                        <td>{{ussd_request.date_updated}}</td>
                         <td>
-                            <button class=' btn-info btn-sm edit btn-flat' data-id='{{ category.id }}'><i class='mdi mdi-table-edit'></i></button>
-                            <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ category.id }}'><i class='mdi mdi-delete'></i> </button>
+                            <button class=' btn-info btn-sm edit btn-flat' data-id='{{ ussd_request.id }}'><i class='mdi mdi-table-edit'></i></button>
+                            <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ ussd_request.id }}'><i class='mdi mdi-delete'></i> </button>
                         </td>
                     </tr>
+                  {% endif %}
               {% endfor %}
             </tbody>
-          </table>
+          </table> {% endcomment %}
         </div>
       </div>
     </div>
   </div> 
-</div>
+</div> 
 
 {% endblock content %}
 
@@ -88,19 +94,14 @@
             <div class="modal-header">
               <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title"><b>Add New Category</b></h4>
+              <h4 class="modal-title"><b>Request for USSD</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="{% url 'categories' %}">
+              <form class="form-horizontal" method="POST" action="{% url 'dashboard_ussd' %}">
                 {% csrf_token %}
                 <div class="form-group">
-                  <label for="exampleInputPassword1">Category Name</label>
-                  <input type="text" class="form-control" id="id_category_name" name="category_name" placeholder="">
-                </div>
-
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Price</label>
-                  <input class="form-control" type="number" name="price" id="id_price">
+                  <label for="exampleInputPassword1">Phone Number</label>
+                  <input type="text" class="form-control" id="id_phoneNumber" name="phoneNumber" placeholder="">
                 </div>
 
                 <div class="form-group">

@@ -224,24 +224,22 @@ def getCategories(request):
 
 @login_required()
 def ussd(request):
-    form = CategoryForm()
-    categories = Category.objects.filter(user=request.user)
+    form = UssdRequestForm()
+    ussd_requests = UssdRequest.objects.filter()
     
     events = Event.objects.filter(user=request.user)
-    print(events)
+    
     if request.method == "POST":
-        form = CategoryForm(request.POST or None)
+        form = UssdRequestForm(request.POST or None)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.user = request.user
-            user.save()
-            messages.success(request, "Event created successfully!")
-            return redirect(reverse('categories'))
+            form.save()
+            messages.success(request, "Request sent successfully. We will contact you within two working days.")
+            return redirect(reverse('dashboard_ussd'))
         else:
-            messages.error(request, "Event could not be created!")
+            messages.error(request, "Sorry! There was an issue requesting for USSD. Please try again later.")
     
     
-    context = {'form':form, 'categories':categories, 'events':events}
+    context = {'form':form, 'ussd_requests':ussd_requests, 'events':events}
     
     return render(request, 'dashboard/dashboard/ussd.html', context)
 
