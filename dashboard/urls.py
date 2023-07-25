@@ -7,6 +7,7 @@ urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
     path('categories', views.categories, name='categories'),
     path('events', views.events, name='dashboard_events'),
+    path('ussd-request', views.ussd, name='dashboard_ussd'),
     
     # Get Views
     path('getEvents', views.getEvents, name='getEvents'),

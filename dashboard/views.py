@@ -222,6 +222,31 @@ def getCategories(request):
 
 
 
+@login_required()
+def ussd(request):
+    form = CategoryForm()
+    categories = Category.objects.filter(user=request.user)
+    
+    events = Event.objects.filter(user=request.user)
+    print(events)
+    if request.method == "POST":
+        form = CategoryForm(request.POST or None)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.user = request.user
+            user.save()
+            messages.success(request, "Event created successfully!")
+            return redirect(reverse('categories'))
+        else:
+            messages.error(request, "Event could not be created!")
+    
+    
+    context = {'form':form, 'categories':categories, 'events':events}
+    
+    return render(request, 'dashboard/dashboard/ussd.html', context)
+
+
+
 
 # All tickets
 
@@ -229,7 +254,14 @@ def ticket_reservations(request):
     
     
     tickets = Ticket.objects.all()
-    context = {'tickets':tickets}
+    
+    categories = Category.objects.filter(user=request.user)
+    events = Event.objects.filter(user=request.user)
+    
+    context = {'tickets':tickets, 'categories':categories, 'events':events}
     return render(request, 'dashboard/dashboard/tickets.html', context)
     
     
+    
+    
+

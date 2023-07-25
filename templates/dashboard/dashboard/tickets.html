@@ -95,18 +95,19 @@
             <input type="date" id="to_date">
             
             <select id="sale_type" >
-              <option value="" placeholder="Company Location">Event</option>
-              <option value="wholesale">Event 1</option>
-              <option value="Cash Sale">Event 2</option>
-              <option value="Credit Sale">Event 3</option>
+              <option value="" placeholder="Events">Select Event</option>
+              {% for event in events %}
+                <option value="{{event.id}}"> {{ event.event_name }} </option>
+              {% endfor %}
+
             </select>
 
             <input type="text" id="sale_id" placeholder="Event ID">  
       
             <select id="user" >
               <option value="" placeholder="User">Event Category</option>
-              {% for user in users %}
-              <option value="{{ user.id }}">{{ user.username }}</option>
+              {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.category_name }}</option>
               {% endfor %}
             </select>
           </form>
