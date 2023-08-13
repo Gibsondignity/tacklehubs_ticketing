@@ -66,19 +66,19 @@
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-3">
-                <input type="date" placeholder="Date">
+                <input type="date" class="date" placeholder="Date">
             </div>
 
             <div class="col-12 col-md-3">
-                <input type="text" placeholder="Event">
+                <input type="text" class="event" placeholder="Event">
             </div>
 
             <div class="col-12 col-md-3">
-                <input type="text" placeholder="Location">
+                <input type="text" class="location" placeholder="Location">
             </div>
 
             <div class="col-12 col-md-3">
-                <input class="btn gradient-bg" type="submit" value="Search Events">
+                <input class="btn gradient-bg search-events" type="button" value="Search Events">
             </div>
         </div>
     </div>
@@ -168,7 +168,29 @@
 </div> {% endcomment %}
 
 
+<script>
 
+    
+    //$(document).on('click', '.search-events', function(e){
+        //e.preventDefault();
+        //var id = $(this)[0].id;
+    //})
+
+
+
+    $('.event').keyup(function(){
+        var event = $('.event');
+    })
+
+
+    $('.location').keyup(function(){
+        var location = $('.location');
+    })
+
+
+    $(document).on('change', '', function(){})
+
+</script>
 
 
 
