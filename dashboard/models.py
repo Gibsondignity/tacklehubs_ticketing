@@ -1,5 +1,7 @@
 from django.db import models
 from tickets.models import Event
+from django.utils import timezone
+from accounts.models import User
 
 # Create your models here.
 
@@ -11,3 +13,24 @@ class UssdRequest(models.Model):
     
     def __str__(self):
         return self.event.event_name
+    
+    
+    
+    
+class BankAccounts(models.Model):
+    account_type_choices = (('savings', 'savings'), ('current', 'current'))
+    
+    account_number = models.CharField(max_length=50, null=True, blank=True)
+    account_name = models.CharField(max_length=50, null=True, blank=True)
+    bank_name = models.CharField(max_length=50, null=True, blank=True)
+    account_type = models.CharField(max_length=50, null=True, blank=True, choices=account_type_choices)
+    bank_branch = models.CharField(max_length=50, null=True, blank=True)
+    User = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True, related_name='created_%(class)s_set')
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(auto_now=timezone.now)
+    
+    class Meta:
+        verbose_name_plural = "Bank Accounts"
+        
+    def __str__(self):
+        return str(self.account_number)

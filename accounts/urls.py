@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path('account', views.account_login, name='login'),
     path('register', views.account_register, name='register'),
+    path('logout', views.account_logout, name='logout'),
     
     # reset_password
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password/password_reset_done.html'), name='password_reset_done'),

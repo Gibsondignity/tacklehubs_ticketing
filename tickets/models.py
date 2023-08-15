@@ -19,6 +19,7 @@ class FileField(models.FileField):
 
 
 class Event(models.Model):
+    status_choices = (('Pending', 'Pending'), ('Approved', 'Approved'), ('Rejected', 'Rejected'))
     event_name = models.CharField(max_length=256, )
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) 
     event_date = models.DateField()
@@ -28,7 +29,7 @@ class Event(models.Model):
     picture = FileField(upload_to='gallery', blank=True, null=True)
     location = models.CharField(max_length=65, null=True, blank=True)
     slug = models.SlugField(blank=True, null=True)
-    status = models.BooleanField(default=False)
+    status = models.CharField(default="Pending", choices=status_choices, max_length=25)
     date_created = models.DateTimeField(auto_now=True)
     date_updated = models.DateTimeField(auto_now_add=True)
     

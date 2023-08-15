@@ -49,10 +49,10 @@ def account_login(request):
         if user != None:
             login(request, user)
             if user.is_superuser:
-                messages.error(request, "You're logged in as an admin")
+                messages.success(request, "You're logged in as an admin")
                 return redirect(reverse("dashboard"))     
             else:
-                messages.error(request, "Login successfull")
+                messages.success(request, "Login successfull")
                 return redirect(reverse("dashboard"))   
         else:
             messages.error(request, "User not found")
@@ -95,7 +95,7 @@ def account_logout(request):
         messages.error(
             request, "You need to be logged in to perform this action")
 
-    return redirect(reverse("account_login"))
+    return redirect(reverse("login"))
 
 
 

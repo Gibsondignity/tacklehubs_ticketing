@@ -1,5 +1,5 @@
 from tickets.models import *
-from .models import UssdRequest
+from .models import *
 from django import forms
 from django.forms import ModelForm
 
@@ -44,6 +44,29 @@ class EventForm(ModelForm):
             'starting_price': forms.NumberInput(attrs={'class': 'form-control', 'required': 'True'}),
             'picture': forms.FileInput(attrs={'class': 'form-control', 'required':'True', 'accept':"image/*"}),
             'location': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
+        }
+        
+        
+    
+    
+        
+class BankAccountsForm(ModelForm):
+    class Meta:
+        model = BankAccounts
+        fields = (
+            'account_number',
+            'account_name',
+            'bank_name',
+            'account_type',
+            'bank_branch',
+                )
+        
+        widgets = {
+            'account_number': forms.TextInput(attrs={'class': 'form-control', 'required': True}), 
+            'account_name': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
+            'bank_name': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
+            'account_type': forms.Select(attrs={'class': 'form-control', 'required': 'True' }),
+            'bank_branch': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
         }
         
         

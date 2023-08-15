@@ -248,6 +248,19 @@ def ussd(request):
 
 
 
+
+@login_required()
+def profile(request):
+    
+    form = BankAccountsForm()
+    
+    context = {'form': form}
+    
+    return render(request, 'dashboard/dashboard/profile.html', context)
+
+
+
+
 # All tickets
 
 def ticket_reservations(request):

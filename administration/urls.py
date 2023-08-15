@@ -8,7 +8,6 @@ urlpatterns = [
     path('categories', views.categories, name='categories'),
     path('events', views.events, name='dashboard_events'),
     path('ussd-request', views.ussd, name='dashboard_ussd'),
-    path('profile', views.profile, name='profile'),
     
     # Get Views
     path('getEvents', views.getEvents, name='getEvents'),
