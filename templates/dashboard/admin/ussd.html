@@ -1,0 +1,259 @@
+{% extends 'dashboard/root.html' %}
+
+{% block content %}
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+          <div class="home-tab">
+            <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#audiences" role="tab" aria-selected="false">Event</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#demographics" role="tab" aria-selected="false">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">USSD</a>
+                    </li>
+                </ul>
+                <div>
+                <div class="btn-wrapper">
+                    <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
+                    <a href="#" class="btn btn-otline-dark"><i class="icon-printer"></i> Print</a>
+                    <a href="#" class="btn btn-primary text-white me-0 addnew"><i class="icon-plus"></i> Request</a>
+                </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div> 
+
+
+
+
+    <div class="col-lg-12 grid-margin stretch-card mt-3"> 
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">
+          Request for USSD option
+        </h4>
+        
+        <div class="table-responsive">
+          <p>
+            Please click on the request button at your right upper conrner to request for the USSD option. Terms and Conditions apply. Please, note that, our team will response to your
+            request in two(2) working days. Thank you for using our system.
+          </p>
+          {% comment %} <table class="table " id="example1">
+            
+            <thead>
+              <tr>
+                <th>Phone Number</th>
+                <th>Event</th>
+                <th>Date Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for ussd_request in ussd_requests %}
+                  {% if request.user == ussd_request.event.user %}
+                    <tr>
+                        <td>{{ussd_request.phoneNumber}}</td>
+                        <td>{{ussd_request.event}}</td>
+                        <td>{{ussd_request.date_updated}}</td>
+                        <td>
+                            <button class=' btn-info btn-sm edit btn-flat' data-id='{{ ussd_request.id }}'><i class='mdi mdi-table-edit'></i></button>
+                            <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ ussd_request.id }}'><i class='mdi mdi-delete'></i> </button>
+                        </td>
+                    </tr>
+                  {% endif %}
+              {% endfor %}
+            </tbody>
+          </table> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div> 
+</div> 
+
+{% endblock content %}
+
+
+
+{% block modal %}
+
+{% comment %} Add Modal {% endcomment %}
+
+<div class="modal fade" id="addnew">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><b>Request for USSD</b></h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" method="POST" action="{% url 'dashboard_ussd' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Phone Number</label>
+                  <input type="text" class="form-control" id="id_phoneNumber" name="phoneNumber" placeholder="">
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Event</label>
+                  <select name="event" id="id_event" class="form-control event">
+                    <option value="">Select Event</option>
+                    {%  for event in events %}
+                      <option value="{{event.id}}">{{event.event_name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% comment %} Edit Modal {% endcomment %}
+
+  <div class="modal fade" id="edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><b>Edit Category</b></h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" method="POST" action="{% url 'updateCategory' %}">
+                {% csrf_token %}
+
+                <<input type="hidden" id="id" class="id" name="id">
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Category Name</label>
+                  <input type="text" class="form-control" id="category_name" name="category_name"  placeholder="">
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Price</label>
+                  <input class="form-control" type="number" class="price" id="price" name="price">
+                </div>
+
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Event</label>
+                  <select name="event" id="event" class="form-control bank">
+                    {%  for event in events %}
+                      <option value="{{event.id}}">{{event.event_name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% comment %} Delete Modal {% endcomment %}
+
+  <div class="modal fade" id="delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"><b>Delete Event</b></h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'deleteCategory' %}">
+                {% csrf_token %}
+                Are you sure want to delete this event?
+                
+                <input type="hidden" id="id" class="id" name="id">
+                <br><br>
+                <center><p style="color: red; font-size: 1rem" type="text" class="category_name" ></p></center>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Delete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock modal %}
+
+
+
+{% block script %}
+<script>
+
+    $(".addnew").on("click", function(){
+
+        $("#addnew").modal("show");
+    })
+
+    
+    $(".edit").on("click", function(){
+      id = $(this).data('id')
+      getRow(id)
+      $("#edit").modal("show");   
+    })
+
+    
+    $(".delete").on("click", function(){
+      id = $(this).data('id')
+      getRow(id)
+      $("#delete").modal("show"); 
+    })
+
+
+    function getRow(id) {
+      $.ajax({
+          type: 'GET',
+          url: "{% url 'getCategories' %}",
+          data: {
+              id: id
+          },
+          dataType: 'json',
+          success: function(response) {
+              $('.id').val(response.id);
+              console.log(response.category_name)
+              $('.category_name').html(response.category_name);
+              $('#category_name').val(response.category_name);
+              $('#event').val(response.event);
+              $('#price').val(response.price);
+              
+              //console.log(response);
+          }
+      });
+  }
+
+
+
+</script>
+{% endblock script %}

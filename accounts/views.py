@@ -103,38 +103,45 @@ def account_logout(request):
 # reset password
 
 def password_reset_request(request):
-    
-	if request.method == "POST":
-		password_reset_form = PasswordResetForm(request.POST)
+    print("Here")
+
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
         
-		if password_reset_form.is_valid():
-			data = password_reset_form.cleaned_data['email']
-			associated_users = User.objects.filter(Q(email=data))
-			if associated_users.exists():
-				for user in associated_users:
-					
-					c = {
-					"email":user.email,
-					'domain':'tickets.tacklehubs.com',
-					'site_name': 'TackleHubs',
-					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-					"user": user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'https',
-					    }
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            print(data)
+            associated_users = User.objects.filter(Q(email=data))
+            print(associated_users.exists())
+            if associated_users.exists():
+                for user in associated_users:
                     
-					# email = render_to_string(email_template_name, c)
+                    c = {
+                    "email":user.email,
+                    'domain':'127.0.0.1:8000',
+                    #'domain':'tickets.tacklehubs.com',
+                    'site_name': 'TackleHubs',
+                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "user": user,
+                    'token': default_token_generator.make_token(user),
+                    'protocol': 'http',
+                    #'protocol': 'https',
+                        }
                     
-					try:
+                    # email = render_to_string(email_template_name, c)
+                    
+                    try:
                         
-						send_password(request, user.email, c)
+                        send_password(request, user.email, c)
                     
                         #tenant_email(email, user.data['first_name'], tenant_status="resetpassword")
-					except BadHeaderError:
-						return HttpResponse('Invalid header found.')
-					return redirect ("/password_reset/done/")
-	password_reset_form = PasswordResetForm()
-	return render(request=request, template_name="password/password_reset.html", context={"password_reset_form":password_reset_form})
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect ("/password_reset/done/")
+            else:
+                messages.error(request, 'User not found')
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="password/password_reset.html", context={"password_reset_form":password_reset_form})
 
 
 

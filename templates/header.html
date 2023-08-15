@@ -10,29 +10,29 @@
                         <div class="row">
                             <div class="col flex flex-column justify-content-center">
                                 <div class="entry-header">
-                                    <div class="countdown flex align-items-center">
+                                    <div id="countdown" class="countdown flex align-items-center">
                                         <div class="countdown-holder flex align-items-baseline">
-                                            <span class="dday"></span>
+                                            <span id="dday"></span>
                                             <label>Days</label>
                                         </div><!-- .countdown-holder -->
 
                                         <div class="countdown-holder flex align-items-baseline">
-                                            <span class="dhour"></span>
+                                            <span id="dhour"></span>
                                             <label>Hours</label>
                                         </div><!-- .countdown-holder -->
 
                                         <div class="countdown-holder flex align-items-baseline">
-                                            <span class="dmin"></span>
+                                            <span id="dmin"></span>
                                             <label>Minutes</label>
                                         </div><!-- .countdown-holder -->
 
                                         <div class="countdown-holder flex align-items-baseline">
-                                            <span class="dsec"></span>
+                                            <span id="dsec"></span>
                                             <label>Seconds</label>
                                         </div><!-- .countdown-holder -->
-                                    </div><!-- .countdown -->
+                                    </div><!-- .countdown --> 
 
-                                    <h2 class="entry-title">1 We have the best events. <br>Get your tiket now!</h2>
+                                    <h2 class="entry-title">We have the best events. <br>Get your tiket now!</h2>
                                 </div><!--- .entry-header -->
 
                                 <div class="entry-footer">
@@ -57,3 +57,60 @@
         </div>
     </div><!-- .swiper-container -->
 </header><!-- .site-header -->
+
+
+
+<script>
+    /*
+    $(document).ready(function() {
+      // Set the target date and time for the countdown
+      const targetDate = new Date("2023-12-31T23:59:59").getTime();
+    
+      // Update the countdown every second
+      const countdownInterval = setInterval(function() {
+        const now = new Date().getTime();
+        const timeRemaining = targetDate - now;
+    
+        if (timeRemaining > 0) {
+          const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+    
+          $("#countdown").html(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+        } else {
+          clearInterval(countdownInterval);
+          $("#countdown").html("Countdown expired!");
+        }
+      }, 1000);
+    });
+    */
+
+    
+        // Set the target date and time for the countdown
+        const targetDate = new Date("2023-12-31T23:59:59").getTime();
+        
+        // Update the countdown every second
+        const countdownInterval = setInterval(function() {
+          const now = new Date().getTime();
+          const timeRemaining = targetDate - now;
+        
+          if (timeRemaining > 0) {
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+        
+            //document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            document.getElementById("dday").innerHTML = days
+            document.getElementById("dhour").innerHTML = hours
+            document.getElementById("dmin").innerHTML = minutes
+            document.getElementById("dsec").innerHTML = seconds
+            
+          } else {
+            clearInterval(countdownInterval);
+            document.getElementById("countdown").innerHTML = "Countdown expired!";
+          }
+        }, 1000);
+        
+    </script>

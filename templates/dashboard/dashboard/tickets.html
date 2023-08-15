@@ -102,7 +102,7 @@
 
             </select>
 
-            <input type="text" id="sale_id" placeholder="Event ID">  
+            <input type="text" id="event_id" placeholder="Event ID">  
       
             <select id="user" >
               <option value="" placeholder="User">Event Category</option>
@@ -211,6 +211,210 @@
   }
 
 
+
+  $(document).on('change', '#from_date', function(e) {
+    var companylocation = $('#companylocation').val();
+    var from_date = $('#from_date').val();
+    var to_date = $('#to_date').val();
+    var sale_type = $('#sale_type').val();
+    var user = $('#user').val();
+    var table = $('#example1')
+
+    var dataObject = {
+      from_date: from_date,
+      to_date: to_date,
+      companylocation: companylocation,
+      sale_type: sale_type,
+      user: user,
+    }
+
+
+
+
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'TicketsReportById' %}",
+      data: JSON.stringify(dataObject),
+      contentType: "application/json",
+      headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+      },
+
+
+    success: function(data) {
+      $('#tbody').empty();
+      $.each(data, function(key, value){
+
+        total_amount = Number(parseFloat(value.total_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        total_discount = Number(parseFloat(value.total_discount)).toLocaleString("en", {minimumFractionDigits: 2})
+        net_amount = Number(parseFloat(value.net_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        cash = Number(parseFloat(value.cash)).toLocaleString("en", {minimumFractionDigits: 2})
+        momo = Number(parseFloat(value.momo)).toLocaleString("en", {minimumFractionDigits: 2})
+        visa = Number(parseFloat(value.visa)).toLocaleString("en", {minimumFractionDigits: 2})
+        paid_amount = Number(parseFloat(value.paid_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        balance = Number(parseFloat(value.balance)).toLocaleString("en", {minimumFractionDigits: 2})
+
+        $('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td></tr>');
+        //$('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td><td>'+value.company_location__name+'</td></tr>');
+      });
+    }
+  })
+    
+
+});
+
+    
+    
+  $(document).on('change', '#to_date', function(e) {
+    var companylocation = $('#companylocation').val();
+    var from_date = $('#from_date').val();
+    var to_date = $('#to_date').val();
+    var sale_type = $('#sale_type').val();
+    var user = $('#user').val();
+    var table = $('#example1')
+
+
+    var dataObject = {
+      from_date: from_date,
+      to_date: to_date,
+      companylocation: companylocation,
+      sale_type: sale_type,
+      user: user,
+    }
+
+
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'TicketsReportById' %}",
+      data: JSON.stringify(dataObject),
+      contentType: "application/json",
+      headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+      },
+
+
+    success: function(data) {
+      $('#tbody').empty();
+      $.each(data, function(key, value){
+
+        total_amount = Number(parseFloat(value.total_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        total_discount = Number(parseFloat(value.total_discount)).toLocaleString("en", {minimumFractionDigits: 2})
+        net_amount = Number(parseFloat(value.net_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        cash = Number(parseFloat(value.cash)).toLocaleString("en", {minimumFractionDigits: 2})
+        momo = Number(parseFloat(value.momo)).toLocaleString("en", {minimumFractionDigits: 2})
+        visa = Number(parseFloat(value.visa)).toLocaleString("en", {minimumFractionDigits: 2})
+        paid_amount = Number(parseFloat(value.paid_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        balance = Number(parseFloat(value.balance)).toLocaleString("en", {minimumFractionDigits: 2})
+
+        //$('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td><td>'+value.company_location__name+'</td></tr>');
+        $('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td></tr>');
+      });
+    }
+  })
+
+});
+
+    
+    
+  $(document).on('change', '#sale_type', function(e) {
+    var companylocation = $('#companylocation').val();
+    var from_date = $('#from_date').val();
+    var to_date = $('#to_date').val();
+    var sale_type = $('#sale_type').val();
+    var user = $('#user').val();
+    var table = $('#example1')
+
+
+    var dataObject = {
+      from_date: from_date,
+      to_date: to_date,
+      companylocation: companylocation,
+      sale_type: sale_type,
+      user: user,
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'TicketsReportById' %}",
+      data: JSON.stringify(dataObject),
+      contentType: "application/json",
+      headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+      },
+
+
+    success: function(data) {
+      $('#tbody').empty();
+      $.each(data, function(key, value){
+
+        total_amount = Number(parseFloat(value.total_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        total_discount = Number(parseFloat(value.total_discount)).toLocaleString("en", {minimumFractionDigits: 2})
+        net_amount = Number(parseFloat(value.net_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        cash = Number(parseFloat(value.cash)).toLocaleString("en", {minimumFractionDigits: 2})
+        momo = Number(parseFloat(value.momo)).toLocaleString("en", {minimumFractionDigits: 2})
+        visa = Number(parseFloat(value.visa)).toLocaleString("en", {minimumFractionDigits: 2})
+        paid_amount = Number(parseFloat(value.paid_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        balance = Number(parseFloat(value.balance)).toLocaleString("en", {minimumFractionDigits: 2})
+
+        //$('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td><td>'+value.company_location__name+'</td></tr>');
+        $('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td></tr>');
+      });
+    }
+  })
+    
+});
+
+   
+
+
+
+  $(document).on('change', '#user', function(e) {
+    var companylocation = $('#companylocation').val();
+    var from_date = $('#from_date').val();
+    var to_date = $('#to_date').val();
+    var sale_type = $('#sale_type').val();
+    var user = $('#user').val();
+    var table = $('#example1')
+
+
+    var dataObject = {
+      from_date: from_date,
+      to_date: to_date,
+      companylocation: companylocation,
+      sale_type: sale_type,
+      user: user,
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'TicketsReportById' %}",
+      data: JSON.stringify(dataObject),
+      contentType: "application/json",
+      headers: {
+          'X-CSRFToken': '{{ csrf_token }}'
+      },
+
+
+    success: function(data) {
+      $('#tbody').empty();
+      $.each(data, function(key, value){
+
+        total_amount = Number(parseFloat(value.total_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        total_discount = Number(parseFloat(value.total_discount)).toLocaleString("en", {minimumFractionDigits: 2})
+        net_amount = Number(parseFloat(value.net_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        cash = Number(parseFloat(value.cash)).toLocaleString("en", {minimumFractionDigits: 2})
+        momo = Number(parseFloat(value.momo)).toLocaleString("en", {minimumFractionDigits: 2})
+        visa = Number(parseFloat(value.visa)).toLocaleString("en", {minimumFractionDigits: 2})
+        paid_amount = Number(parseFloat(value.paid_amount)).toLocaleString("en", {minimumFractionDigits: 2})
+        balance = Number(parseFloat(value.balance)).toLocaleString("en", {minimumFractionDigits: 2})
+
+        //$('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td><td>'+value.company_location__name+'</td></tr>');
+        $('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id='+value.id+'><i class="fa fa-eye">'+'View'+'</i></button></td><td>'+value.sales_id+'</td><td>'+ value.sales_date +'</td><td>'+total_amount+'</td><td>'+total_discount+'</td><td>'+net_amount+'</td><td>'+cash+'</td><td>'+momo+'</td><td>'+visa+'</td><td>'+paid_amount+'</td><td>'+balance+'</td><td>'+value.customer+'</td><td>'+ value.sale_type +'</td><td>'+value.created_by__username+'</td></tr>');
+      });
+    }
+  })
+
+});
 
 </script>
 {% endblock script %}

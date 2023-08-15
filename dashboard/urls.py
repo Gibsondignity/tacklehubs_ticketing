@@ -23,5 +23,6 @@ urlpatterns = [
     path('deleteCategory', views.deleteCategory, name='deleteCategory'),
     
     
-    path('ticket_reservations', views.ticket_reservations, name='ticket_reservations')
+    path('ticket_reservations', views.ticket_reservations, name='ticket_reservations'),
+    path('TicketsReportById', views.TicketsReportById, name='TicketsReportById'),
 ]

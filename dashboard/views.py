@@ -1,3 +1,5 @@
+from datetime import timezone
+import json
 from django.shortcuts import render, redirect, reverse
 from .forms import *
 from django.contrib import messages
@@ -258,6 +260,48 @@ def ticket_reservations(request):
     
     context = {'tickets':tickets, 'categories':categories, 'events':events}
     return render(request, 'dashboard/dashboard/tickets.html', context)
+
+
+
+def TicketsReportById(request):
+    
+    if request.method == "POST":
+        
+        json_data = json.loads(request.body)
+        from_date = json_data['from_date']
+        to_date = json_data['to_date']
+        companylocation = json_data['companylocation']
+        sale_type = json_data['sale_type']
+        user = json_data['user']
+        
+        sales = Ticket.objects.all()
+            
+        if from_date != "" and not None:
+            sales = sales.filter(sales_date__date__gte=from_date)
+        else: 
+            sales = sales.filter(sales_date__date=timezone.now().date())
+        
+        if to_date != "" and not None:
+            sales = sales.filter(sales_date__date__lte=to_date)
+            
+        if companylocation != "" and not None:
+            sales = sales.filter(company_location=companylocation)
+            
+        if sale_type != "" and not None:
+            sales = sales.filter(sale_type=sale_type)
+            
+        if user != "" and not None:
+            sales = sales.filter(created_by=user)
+             
+        queryset = sales.values('id', 'sales_id', 'sales_date', 'total_amount', 'total_discount', 'net_amount', 'paid_amount', 'balance', 'cash', 'momo', 'visa', 'created_by__username', 'company_location__name', 'sale_type', 'customer')
+        for data in queryset:
+            if data['sale_type'] == "Credit Sale":
+                #print(Sales.objects.get(id=int(data['id'])))
+                data['customer'] = Ticket.objects.get(sales_id=data['sales_id']).credit_customer.name
+        return JsonResponse(list(queryset), safe=False)
+        
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=400)
     
     
     

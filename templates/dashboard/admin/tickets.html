@@ -1,0 +1,216 @@
+{% extends 'dashboard/root.html' %}
+
+{% block content %}
+
+<style>
+    .content{
+      padding: 20px;
+      }
+      
+      .collapse-button {
+        background-color: #4CAF50; /* Green background */
+        color: white; /* White text */
+        padding: 14px 20px; /* Some padding */
+        border: none; /* No border */
+        cursor: pointer; /* Add a pointer cursor on hover */
+      }
+      
+      .collapse-content {
+        display: none; /* Hide the content by default */
+      }
+
+
+      input, select{
+        //border: 1px solid #962A5A;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 8px;
+      }
+
+      input[type="date"] {
+        //background-color: #962A5A;
+        outline: none;
+        color: #000;
+      }
+      
+      input[type="date"]::-webkit-clear-button {
+        font-size: 18px;
+        height: 30px;
+        position: relative;
+      }
+      
+      input[type="date"]::-webkit-inner-spin-button {
+        height: 28px;
+      }
+      
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        font-size: 15px;
+      
+      }
+    </style>
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+          <div class="home-tab">
+            <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#audiences" role="tab" aria-selected="false">Event</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#demographics" role="tab" aria-selected="false">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="#more" role="tab" aria-selected="false">USSD</a>
+                    </li>
+                </ul>
+                <div>
+                <div class="btn-wrapper">
+                    <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
+                    <a href="#" class="btn btn-otline-dark"><i class="icon-printer"></i> Print</a>
+                    <a href="#" class="btn btn-primary text-white me-0 addnew"><i class="icon-plus"></i> Add New</a>
+                </div>
+                </div>
+            </div>
+          </div>
+        </div>
+    </div> 
+
+
+
+
+    <div class="col-lg-12 grid-margin stretch-card mt-3"> 
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Event Categories</h4>
+        
+        <form method="POST" action="">
+            <label for="from_date">From Date:</label>
+            <input type="date" id="from_date">
+            <label for="to_date">To Date:</label>
+            <input type="date" id="to_date">
+            
+            <select id="sale_type" >
+              <option value="" placeholder="Events">Select Event</option>
+              {% for event in events %}
+                <option value="{{event.id}}"> {{ event.event_name }} </option>
+              {% endfor %}
+
+            </select>
+
+            <input type="text" id="sale_id" placeholder="Event ID">  
+      
+            <select id="user" >
+              <option value="" placeholder="User">Event Category</option>
+              {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.category_name }}</option>
+              {% endfor %}
+            </select>
+          </form>
+
+
+        <div class="table-responsive">
+          <table class="table " id="example1">
+            
+            <thead>
+              <tr>
+                <th>Phone Number</th>	
+                <th>Name</th>	
+                <th>Email</th>	
+                <th>Number of Tickets</th>	
+                <th>Amount</th>	
+                <th>Registration ID</th> 
+                <th>Reference</th>	
+                <th>Verify</th>	
+                <th>Date Created</th>
+
+              </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                  {% if request.user == ticket.event.user and request.user == ticket.catgory.user %}
+                    <tr>
+                        <td>{{ticket.phone_number}}</td>
+                        <td>{{ticket.name}}</td>
+                        <td>{{ticket.email}}</td>
+                        <td>{{ticket.number_of_tickets}}</td>
+                        <td>{{ticket.amount}}</td>
+                        <td>{{ticket.registration_id}}</td>
+                        <td>{{ticket.ref}}</td>
+                        <td>{{ticket.verify}}</td>
+                        <td>{{ticket.date_created}}</td>
+                        
+                    </tr>
+                  {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+{% endblock content %}
+
+
+
+{% block modal %}
+
+
+{% endblock modal %}
+
+
+
+{% block script %}
+<script>
+
+    $(".addnew").on("click", function(){
+
+        $("#addnew").modal("show");
+    })
+
+    
+    $(".edit").on("click", function(){
+      id = $(this).data('id')
+      getRow(id)
+      $("#edit").modal("show");   
+    })
+
+    
+    $(".delete").on("click", function(){
+      id = $(this).data('id')
+      getRow(id)
+      $("#delete").modal("show"); 
+    })
+
+
+    function getRow(id) {
+      $.ajax({
+          type: 'GET',
+          url: "{% url 'getCategories' %}",
+          data: {
+              id: id
+          },
+          dataType: 'json',
+          success: function(response) {
+              $('.id').val(response.id);
+              console.log(response.category_name)
+              $('.category_name').html(response.category_name);
+              $('#category_name').val(response.category_name);
+              $('#event').val(response.event);
+              $('#price').val(response.price);
+              
+              //console.log(response);
+          }
+      });
+  }
+
+
+
+</script>
+{% endblock script %}
