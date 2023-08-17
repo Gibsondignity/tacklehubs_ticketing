@@ -254,8 +254,13 @@ def profile(request):
     
     user = request.user
     user_bank_details = BankAccounts.objects.filter(user=user).first()
-    print(user_bank_details)
-    
+
+    user_info = UserInfo.objects.filter(user=user).first()
+
+    if user_info:
+        user_form = UserInfoForm(instance=user_info)
+    else:
+        user_form = UserInfoForm()
     
     if user_bank_details:
         form = BankAccountsForm(instance=user_bank_details)
@@ -275,11 +280,34 @@ def profile(request):
                 user.user = request.user
                 user.save()
                 messages.success(request, "Bank account info created succesfully!")
-    context = {'form': form} 
+    context = {'form': form, 'user_form':user_form} 
     return render(request, 'dashboard/dashboard/profile.html', context)
 
 
 
+
+@login_required()
+def UserInformation(request):
+
+    user = request.user
+    user_info = UserInfo.objects.filter(user=user).first()
+        
+    if request.method == "POST":
+        if user_info:
+            form = UserInfoForm(request.POST or None, instance=user_info)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "User info updated succesfully!")
+        else:
+            form = UserInfoForm(request.POST or None)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.user = request.user
+                user.save()
+                messages.success(request, "User info created succesfully!")
+
+    return redirect(reverse('profile'))
+    
 
 # All tickets
 

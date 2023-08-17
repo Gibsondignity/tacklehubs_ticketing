@@ -9,6 +9,7 @@ urlpatterns = [
     path('events', views.events, name='dashboard_events'),
     path('ussd-request', views.ussd, name='dashboard_ussd'),
     path('profile', views.profile, name='profile'),
+    path('UserInformation', views.UserInformation, name='UserInformation'),
     
     # Get Views
     path('getEvents', views.getEvents, name='getEvents'),

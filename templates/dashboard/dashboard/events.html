@@ -95,7 +95,7 @@
                 <th>Startng Price</th>
                 <th>Location</th>
                 <th>Status</th>
-                <th>Date Created</th>
+                {% comment %} <th>Date Created</th> {% endcomment %}
                 <th>Action</th>
               </tr>
             </thead>
@@ -109,7 +109,7 @@
                         <td>{{event.starting_price}}</td>
                         <td class="location">{{event.location}}</td>
                         <td>{{event.status}}</td>
-                        <td>{{event.date_created}}</td>
+                        {% comment %} <td>{{event.date_created}}</td> {% endcomment %}
                         <td>
                             <button class=' btn-info btn-sm edit btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-table-edit'></i></button>
                             <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-delete'></i> </button>

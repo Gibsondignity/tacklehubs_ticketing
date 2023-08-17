@@ -8,6 +8,7 @@ from accounts.models import User
 class UssdRequest(models.Model):
     phoneNumber = models.CharField(max_length=100)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now=True, null=True)
     date_updated = models.DateTimeField(auto_now_add=True, null=True)
     
@@ -37,9 +38,7 @@ class BankAccounts(models.Model):
     
     
     
-class UserInfo(models.Model):
-    account_type_choices = (('savings', 'savings'), ('current', 'current'))
-    
+class UserInfo(models.Model): 
     contact_1 = models.CharField(max_length=50, null=True, blank=True)
     contact_2 = models.CharField(max_length=50, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
@@ -49,7 +48,7 @@ class UserInfo(models.Model):
     date_updated = models.DateTimeField(auto_now=timezone.now)
     
     class Meta:
-        verbose_name_plural = "Bank Accounts"
+        verbose_name_plural = "User Information"
         
     def __str__(self):
-        return str(self.account_number)
+        return str(self.user)

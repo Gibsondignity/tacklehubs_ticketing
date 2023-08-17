@@ -70,6 +70,24 @@ class BankAccountsForm(ModelForm):
         }
         
         
+class UserInfoForm(ModelForm):
+    class Meta:
+        model = UserInfo
+        fields = (
+            'contact_1',
+            'contact_2',
+            'location',
+            'zip_code',
+                )
+        
+        widgets = {
+            'contact_1': forms.TextInput(attrs={'class': 'form-control', 'required': True}), 
+            'contact_2': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
+            'zip_code': forms.TextInput(attrs={'class': 'form-control', 'required': 'True'}),
+        }
+        
+        
         
         
 class UssdRequestForm(ModelForm):
