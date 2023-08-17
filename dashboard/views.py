@@ -252,10 +252,30 @@ def ussd(request):
 @login_required()
 def profile(request):
     
-    form = BankAccountsForm()
+    user = request.user
+    user_bank_details = BankAccounts.objects.filter(user=user).first()
+    print(user_bank_details)
     
-    context = {'form': form}
     
+    if user_bank_details:
+        form = BankAccountsForm(instance=user_bank_details)
+    else:
+        form = BankAccountsForm()
+        
+    if request.method == "POST":
+        if user_bank_details:
+            form = BankAccountsForm(request.POST or None, instance=user_bank_details)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Bank account info updated succesfully!")
+        else:
+            form = BankAccountsForm(request.POST or None)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.user = request.user
+                user.save()
+                messages.success(request, "Bank account info created succesfully!")
+    context = {'form': form} 
     return render(request, 'dashboard/dashboard/profile.html', context)
 
 

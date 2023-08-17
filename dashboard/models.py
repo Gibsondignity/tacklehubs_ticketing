@@ -25,7 +25,26 @@ class BankAccounts(models.Model):
     bank_name = models.CharField(max_length=50, null=True, blank=True)
     account_type = models.CharField(max_length=50, null=True, blank=True, choices=account_type_choices)
     bank_branch = models.CharField(max_length=50, null=True, blank=True)
-    User = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True, related_name='created_%(class)s_set')
+    user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True, related_name='created_%(class)s_set')
+    date_created = models.DateTimeField(default=timezone.now)
+    date_updated = models.DateTimeField(auto_now=timezone.now)
+    
+    class Meta:
+        verbose_name_plural = "Bank Accounts"
+        
+    def __str__(self):
+        return str(self.account_number)
+    
+    
+    
+class UserInfo(models.Model):
+    account_type_choices = (('savings', 'savings'), ('current', 'current'))
+    
+    contact_1 = models.CharField(max_length=50, null=True, blank=True)
+    contact_2 = models.CharField(max_length=50, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
+    zip_code = models.CharField(max_length=50, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, null=True, blank=True, related_name='created_%(class)s_set')
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=timezone.now)
     

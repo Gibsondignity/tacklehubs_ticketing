@@ -54,8 +54,7 @@
                     <div class="card-body">
                       <h4 class="card-title">Bank Details </h4>
                       
-
-                      <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'dashboard_events' %}">
+                      <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'profile' %}">
                         {% csrf_token %}
                       
                             {% for field in form  %}
@@ -63,15 +62,46 @@
                                 <span class="text-danger">{{field.errors}}</span>
                                 {{field.label_tag}}
                                 {{field}}
-                            
                             {% endfor %}
-          
-                    
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                       <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Save</button>
-                    </div>
+                    </div> 
+                    
+                    
+                  
+                    {% comment %} <form class="forms-sample" method="POST" enctype="multipart/form-data" action="{% url 'profile' %}">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label for="account_number">Account Number</label>
+                        <input type="text" class="form-control" id="account_number" name="account_number" value={{account_number}}>
+                      </div>
 
+                      <div class="form-group">
+                        <label for="account_name">Account Name</label>
+                        <input type="text" class="form-control" id="account_name" nmae="account_name" value={{account_name}}>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="bank_name">Bank Name</label>
+                        <input type="text" class="form-control" id="bank_name" nmae="bank_name" value={{bank_name}}>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="account_type">Account Type</label>
+                        <select class="form-control" id="account_type" name="account_type" value={{account_type}}>
+                          <option value="Savings">Savings</option>
+                          <option value="Current">Current</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="bank_branch">Bank Branch</label>
+                        <input type="text" class="form-control" id="bank_branch" name="bank_branch" value={{bank_branch}}>
+                      </div>
+                      
+                      <button type="submit" class="btn btn-primary me-2">Save</button>
+                      
+                    </form> {% endcomment %}
                       
                     </div>
                   </div>

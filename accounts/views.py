@@ -42,10 +42,10 @@ def account_login(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         
-        print(email, password)
+        #print(email, password)
         user = EmailBackend.authenticate(request, username=request.POST.get(
             'email'), password=request.POST.get('password'))
-        print(user)
+        #print(user)
         if user != None:
             login(request, user)
             if user.is_superuser:
@@ -103,7 +103,7 @@ def account_logout(request):
 # reset password
 
 def password_reset_request(request):
-    print("Here")
+    #print("Here")
 
     if request.method == "POST":
         password_reset_form = PasswordResetForm(request.POST)
