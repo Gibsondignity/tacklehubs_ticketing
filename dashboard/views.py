@@ -5,12 +5,21 @@ from .forms import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.conf import settings
 # Create your views here.
 
 
 @login_required()
 def dashboard(request):
-    
+    if settings.DEBUG == False:
+        domain = 'tackletickets.org'
+        protocol = 'https'
+    else:
+        protocol = 'http'
+        domain = '127.0.0.1:8000'
+        
+    #print(protocol, domain)
+        
     return render(request, 'dashboard/dashboard/dashboard.html', context={})
 
 
@@ -24,8 +33,6 @@ def events(request):
     events = Event.objects.filter(user=request.user)
 
     #print(events)
-    for event in events:
-        print(event.user)
     
     if request.method == "POST":
         form = EventForm(request.POST or None, request.FILES or None)
@@ -116,7 +123,10 @@ def getEvents(request):
         context['description'] = event.description
         context['starting_price'] = event.starting_price
         context['location'] = event.location
-        context['picture'] = "http://localhost:8000" + event.picture.url
+        if settings.DEBUG == True:
+            context['picture'] = "http://localhost:8000" + event.picture.url
+        else:
+            context['picture'] = "https://tackletickets.org" + event.picture.url
     except:
         messages.error(request, "There was an error fetching data!")
         
@@ -135,7 +145,7 @@ def categories(request):
     categories = Category.objects.filter(user=request.user)
     
     events = Event.objects.filter(user=request.user)
-    print(events)
+    #print(events)
     if request.method == "POST":
         form = CategoryForm(request.POST or None)
         if form.is_valid():
@@ -317,12 +327,6 @@ def ticket_reservations(request):
     tickets = Ticket.objects.all()
     categories = Category.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user)
-    # try:
-    #     categories = Category.objects.filter(user=request.user)
-    #     events = Event.objects.filter(user=request.user)
-    # except:
-    #     categories = []
-    #     events = []
     
     context = {'tickets':tickets, 'categories':categories, 'events':events}
     return render(request, 'dashboard/dashboard/tickets.html', context)
@@ -331,39 +335,54 @@ def ticket_reservations(request):
 @login_required()
 def TicketsReportById(request):
     
-    if request.method == "POST":
-        
+    if request.method == "POST":  
         json_data = json.loads(request.body)
         from_date = json_data['from_date']
         to_date = json_data['to_date']
-        companylocation = json_data['companylocation']
-        sale_type = json_data['sale_type']
-        user = json_data['user']
+        event_id = json_data['event_id']
+        payment = json_data['payment']
+        category = json_data['category']
+        event = json_data['event']
+
+        ticket = Ticket.objects.all()
         
-        sales = Ticket.objects.all()
+        if payment == 'verified':
+             payment = True
+        elif payment == "not_verified":
+            payment = False
+
+
+        if event or category:
             
-        if from_date != "" and not None:
-            sales = sales.filter(sales_date__date__gte=from_date)
-        else: 
-            sales = sales.filter(sales_date__date=timezone.now().date())
-        
-        if to_date != "" and not None:
-            sales = sales.filter(sales_date__date__lte=to_date)
+            if event != "" and not None:
+                ticket = ticket.filter(event=event)
+                
+            if category != "" and not None:
+                ticket = ticket.filter(catgory=category)
+   
+            if from_date != "" and not None:
+                ticket = ticket.filter(date_created__gte=from_date)
+            else: 
+                ticket = ticket.filter(date_created__date=timezone.now().date())
             
-        if companylocation != "" and not None:
-            sales = sales.filter(company_location=companylocation)
+            if to_date != "" and not None:
+                ticket = ticket.filter(date_created__date__lte=to_date)
+            else:
+                ticket = ticket.filter(date_created__date=timezone.now().date())
+                
+            if event_id != "" and not None:
+                ticket = ticket.filter(registration_id=event_id)
+                
+            if payment != "" and not None:
+                ticket = ticket.filter(verify=payment)
+                
+        else:
+            ticket = []
+            return JsonResponse(ticket, safe=False)
             
-        if sale_type != "" and not None:
-            sales = sales.filter(sale_type=sale_type)
-            
-        if user != "" and not None:
-            sales = sales.filter(created_by=user)
-             
-        queryset = sales.values('id', 'sales_id', 'sales_date', 'total_amount', 'total_discount', 'net_amount', 'paid_amount', 'balance', 'cash', 'momo', 'visa', 'created_by__username', 'company_location__name', 'sale_type', 'customer')
-        for data in queryset:
-            if data['sale_type'] == "Credit Sale":
-                #print(Sales.objects.get(id=int(data['id'])))
-                data['customer'] = Ticket.objects.get(sales_id=data['sales_id']).credit_customer.name
+              
+        queryset = ticket.values('id', 'name', 'email', 'phone_number', 'amount', 'number_of_tickets', 'registration_id', 'verify', 'date_created')
+        #print(queryset)
         return JsonResponse(list(queryset), safe=False)
         
     else:

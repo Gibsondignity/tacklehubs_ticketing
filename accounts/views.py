@@ -110,22 +110,28 @@ def password_reset_request(request):
         
         if password_reset_form.is_valid():
             data = password_reset_form.cleaned_data['email']
-            print(data)
+            
             associated_users = User.objects.filter(Q(email=data))
-            print(associated_users.exists())
+            
+            
             if associated_users.exists():
+                if settings.DEBUG == False:
+                    domain = 'tackletickets.org'
+                    protocol = 'https'
+                else:
+                    protocol = 'http'
+                    domain = '127.0.0.1:8000'
+                    
                 for user in associated_users:
                     
                     c = {
                     "email":user.email,
-                    'domain':'127.0.0.1:8000',
-                    #'domain':'tickets.tacklehubs.com',
-                    'site_name': 'TackleHubs',
+                    'site_name': 'Tackle Tickets',
                     "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                     "user": user,
                     'token': default_token_generator.make_token(user),
-                    'protocol': 'http',
-                    #'protocol': 'https',
+                    'protocol':  protocol,
+                    'domain': domain,
                         }
                     
                     # email = render_to_string(email_template_name, c)

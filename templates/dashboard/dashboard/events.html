@@ -69,21 +69,6 @@
         
         <div class="table-responsive">
           
-            {% comment %} {% if messages %}
-            {% for message in messages  %}
-      
-              <center>
-                {% if message.tags == "success" %}
-                  <p style="color:green; font-size:1.5rem">{{ message }}</p>
-                {% else %}
-                  <p style="color: red; font-size:1.5rem">{{ message }}</p>
-                {% endif %}
-              </center>
-      
-            {% endfor %}
-      
-            {% endif %} {% endcomment %}
-      
           <table class="table " id="example1">
             
             <thead>
@@ -102,7 +87,7 @@
             <tbody>
                 {% for event in events %}
                     <tr>
-                        <td class="">{{event.event_name}}</td>
+                        <td class="location">{{event.event_name}}</td>
                         <td>{{event.event_date}}</td>
                         <td>{{event.event_time}}</td>
                         <td class="description">{{event.description}}</td> 
