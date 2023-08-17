@@ -118,7 +118,7 @@
           <select id="category">
             <option value="" placeholder="category">Event Category</option>
             {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.category_name }}</option>
+              <option value="{{ category.id }}">{{ category.category_name }}</option>
             {% endfor %}
           </select>
 
@@ -206,6 +206,7 @@
     var event = $('#event').val();
     var event_id = $('#event_id').val();
     var payment = $('#payment').val();
+    var category = $('#category').val();
 
     var dataObject = {
       from_date: from_date,
@@ -213,7 +214,10 @@
       event: event,
       event_id: event_id,
       payment: payment,
+      category: category,
     }
+
+    console.log(dataObject)
 
     $.ajax({
       type: 'POST',
@@ -245,6 +249,7 @@
     var event = $('#event').val();
     var event_id = $('#event_id').val();
     var payment = $('#payment').val();
+    var category = $('#category').val();
 
     var dataObject = {
       from_date: from_date,
@@ -252,7 +257,10 @@
       event: event,
       event_id: event_id,
       payment: payment,
+      category: category,
     }
+
+    console.log(dataObject)
 
     $.ajax({
       type: 'POST',
@@ -286,6 +294,7 @@
     var event = $('#event').val();
     var event_id = $('#event_id').val();
     var payment = $('#payment').val();
+    var category = $('#category').val();
 
     var dataObject = {
       from_date: from_date,
@@ -293,7 +302,10 @@
       event: event,
       event_id: event_id,
       payment: payment,
+      category: category,
     }
+
+    console.log(dataObject)
 
     $.ajax({
       type: 'POST',
@@ -328,6 +340,7 @@
     var event = $('#event').val();
     var event_id = $('#event_id').val();
     var payment = $('#payment').val();
+    var category = $('#category').val();
 
     var dataObject = {
       from_date: from_date,
@@ -335,8 +348,10 @@
       event: event,
       event_id: event_id,
       payment: payment,
+      category: category,
     }
 
+    console.log(dataObject)
 
     $.ajax({
       type: 'POST',
@@ -368,6 +383,7 @@
     var event = $('#event').val();
     var event_id = $('#event_id').val();
     var payment = $('#payment').val();
+    var category = $('#category').val();
 
     var dataObject = {
       from_date: from_date,
@@ -375,7 +391,52 @@
       event: event,
       event_id: event_id,
       payment: payment,
+      category: category,
     }
+
+    console.log(dataObject)
+
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'TicketsReportById' %}",
+      data: JSON.stringify(dataObject),
+      contentType: "application/json",
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+
+
+      success: function (data) {
+        $('#tbody').empty();
+        $.each(data, function (key, value) {
+          total_amount = Number(parseFloat(value.total_amount)).toLocaleString("en", { minimumFractionDigits: 2 })
+          $('#example1').append('<tr><td><button class="btn btn-info btn-sm edit btn-flat" data-id=' + value.id + '><i class="fa fa-eye">' + 'View' + '</i></button></td><td>' + value.sales_id + '</td><td>' + value.sales_date + '</td><td>' + total_amount + '</td><td>' + total_discount + '</td><td>' + net_amount + '</td><td>' + cash + '</td><td>' + momo + '</td><td>' + visa + '</td><td>' + paid_amount + '</td><td>' + balance + '</td><td>' + value.customer + '</td><td>' + value.sale_type + '</td><td>' + value.created_by__username + '</td></tr>');
+        });
+      }
+    })
+
+  });
+
+
+
+  $(document).on('change', '#category', function (e) {
+    var from_date = $('#from_date').val();
+    var to_date = $('#to_date').val();
+    var event = $('#event').val();
+    var event_id = $('#event_id').val();
+    var payment = $('#payment').val();
+    var category = $('#category').val();
+
+    var dataObject = {
+      from_date: from_date,
+      to_date: to_date,
+      event: event,
+      event_id: event_id,
+      payment: payment,
+      category: category,
+    }
+
+    console.log(dataObject)
 
     $.ajax({
       type: 'POST',

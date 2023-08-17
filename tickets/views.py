@@ -33,7 +33,7 @@ def home(request):
 
     # Calculate the date range for the next 20 days
     end_date = today + timedelta(days=20)
-    events = Event.objects.filter(event_date__gte = today)
+    events = Event.objects.filter(event_date__gte = today, status="Approved").order_by('-date_created')[:12]
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     media_url = "http://127.0.0.1:8000/media/"
@@ -50,7 +50,7 @@ def events(request):
 
     # Calculate the date range for the next 20 days
     end_date = today + timedelta(days=20)
-    events = Event.objects.filter(event_date__gte = today)
+    events = Event.objects.filter(event_date__gte = today, status="Approved")
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     media_url = "http://127.0.0.1:8000/media/"

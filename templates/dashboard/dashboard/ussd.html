@@ -44,18 +44,19 @@
         </h4>
         
         <div class="table-responsive">
-          {% comment %} <p>
-            Please click on the request button at your right upper conrner to request for the USSD option. Terms and Conditions apply. Please, note that, our team will response to your
+          <p><b><i>
+            NB: Please click on the request button at your right upper conrner to request for the USSD option. Terms and Conditions apply. Please, note that, our team will respond to your
             request in two(2) working days. Thank you for using our system.
-          </p> {% endcomment %}
+          </b></i></p> 
+          <br>
           <table class="table " id="example1">
             
             <thead>
               <tr>
                 <th>Phone Number</th>
                 <th>Event</th>
-                <th>Date Created</th>
-                <th>Action</th>
+                <th>Status</th>
+                {% comment %} <th>Action</th> {% endcomment %}
               </tr>
             </thead>
             <tbody>
@@ -64,11 +65,11 @@
                     <tr>
                         <td>{{ussd_request.phoneNumber}}</td>
                         <td>{{ussd_request.event}}</td>
-                        <td>{{ussd_request.date_updated}}</td>
-                        <td>
+                        <td>{{ussd_request.status}}</td>
+                        {% comment %} <td>
                             <button class=' btn-info btn-sm edit btn-flat' data-id='{{ ussd_request.id }}'><i class='mdi mdi-table-edit'></i></button>
                             <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ ussd_request.id }}'><i class='mdi mdi-delete'></i> </button>
-                        </td>
+                        </td> {% endcomment %}
                     </tr>
                   {% endif %}
               {% endfor %}

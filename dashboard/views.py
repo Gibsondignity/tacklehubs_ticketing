@@ -201,10 +201,10 @@ def deleteCategory(request):
 
 @login_required() 
 def getCategories(request):
-    id = request.GET.get('id')
-    #print(id)
+    
     context = {}
     try:
+        id = request.GET.get('id')
         category = Category.objects.get(id=int(id))
         context['id'] = category.id
         context['category_name'] = category.category_name
@@ -310,20 +310,25 @@ def UserInformation(request):
     
 
 # All tickets
-
+@login_required()
 def ticket_reservations(request):
     
     
     tickets = Ticket.objects.all()
-    
     categories = Category.objects.filter(user=request.user)
     events = Event.objects.filter(user=request.user)
+    # try:
+    #     categories = Category.objects.filter(user=request.user)
+    #     events = Event.objects.filter(user=request.user)
+    # except:
+    #     categories = []
+    #     events = []
     
     context = {'tickets':tickets, 'categories':categories, 'events':events}
     return render(request, 'dashboard/dashboard/tickets.html', context)
 
 
-
+@login_required()
 def TicketsReportById(request):
     
     if request.method == "POST":

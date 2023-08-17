@@ -19,7 +19,7 @@ class FileField(models.FileField):
 
 
 class Event(models.Model):
-    status_choices = (('Pending', 'Pending'), ('Approved', 'Approved'), ('Rejected', 'Rejected'))
+    status_choices = (('Pending', 'Pending'), ('Approved', 'Approved'), ('Rejected', 'Rejected'), ('Past', 'Past'))
     event_name = models.CharField(max_length=256, )
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) 
     event_date = models.DateField()
