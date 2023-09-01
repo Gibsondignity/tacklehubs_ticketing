@@ -4,25 +4,27 @@ from . import views
 
 urlpatterns = [
     # main views
-    path('dashboard', views.dashboard, name='dashboard'),
-    path('categories', views.categories, name='categories'),
-    path('events', views.events, name='dashboard_events'),
-    path('ussd-request', views.ussd, name='dashboard_ussd'),
+    path('administration/dashboard', views.admin_dashboard, name='administration'),
+    path('administration/categories', views.admin_categories, name='admin_categories'),
+    path('administration/events', views.admin_events, name='admin_dashboard_events'),
+    path('administration/ussd-request', views.admin_ussd, name='admin_dashboard_ussd'),
+    # path('administration/profile', views.admin_profile, name='admin_profile'),
+    # path('administration/UserInformation', views.admin_UserInformation, name='admin_UserInformation'),
     
     # Get Views
-    path('getEvents', views.getEvents, name='getEvents'),
-    path('getCategories', views.getCategories, name='getCategories'),
+    path('administration/getEvents', views.admin_getEvents, name='admin_getEvents'),
+    path('administration/getCategories', views.admin_getCategories, name='admin_getCategories'),
     
     # Upadate
-    path('updateEvent', views.updateEvent, name='updateEvent'),
-    path('updateCategory', views.updateCategory, name='updateCategory'),
+    path('administration/updateEvent', views.admin_updateEvent, name='admin_updateEvent'),
+    path('administration/updateCategory', views.admin_updateCategory, name='admin_updateCategory'),
     
     
     # delete
-    path('deleteEvents', views.deleteEvents, name='deleteEvents'),
-    path('deleteCategory', views.deleteCategory, name='deleteCategory'),
+    path('administration/deleteEvents', views.admin_deleteEvents, name='admin_deleteEvents'),
+    path('administration/deleteCategory', views.admin_deleteCategory, name='admin_deleteCategory'),
     
     
-    path('ticket_reservations', views.ticket_reservations, name='ticket_reservations'),
-    path('TicketsReportById', views.TicketsReportById, name='TicketsReportById'),
+    path('administration/ticket_reservations', views.admin_ticket_reservations, name='admin_ticket_reservations'),
+    path('administration/TicketsReportById', views.admin_TicketsReportById, name='admin_TicketsReportById'),
 ]

@@ -50,7 +50,7 @@ def account_login(request):
             login(request, user)
             if user.is_superuser:
                 messages.success(request, "You're logged in as an admin")
-                return redirect(reverse("dashboard"))     
+                return redirect(reverse("administration"))     
             else:
                 messages.success(request, "Login successfull")
                 return redirect(reverse("dashboard"))   
@@ -195,6 +195,8 @@ def send_password(request, email, context):
     subject, from_email, to = 'Password Reset Requested', 'ticket@tacklehubs.com', email
     plaintext = 'Confirmation'
     #print("sending email")
+    password = settings.EMAIL_HOST_PASSWORD
+    sender_email = settings.EMAIL_HOST_USER
 
     #text_content = plaintext.render(d)
     htmly = get_template('reset_password_email.html')
@@ -204,7 +206,23 @@ def send_password(request, email, context):
 
     msg.attach_alternative(html_content, "text/html")
 
+    # try:
+    #     msg.send()
+    # except:
+    #     messages.error(request, "Email not sent")
+        
+    #msg.attach(msg)
+
     try:
-        msg.send()
-    except:
+        with smtplib.SMTP_SSL("mail.tacklehubs.com", 465) as server:
+            server.login(sender_email, password)
+            server.sendmail(
+                sender_email, email, msg.as_string()
+            )
+    except Exception as e:
+        print(e)
+        # return Response(e.errors, status=status.HTTP_400_BAD_REQUEST)
         messages.error(request, "Email not sent")
+        #pass
+        
+        

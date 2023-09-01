@@ -130,8 +130,9 @@
         </form>
 
         <br><br>
-        <b id="total_amount"></b><br><br>
-       <b id="total_tickets"></b><br>
+         <b id="total_amount"></b><br><br>
+        <b id="total_tickets"></b><br>
+
 
         <div class="table-responsive">
           <table class="table" id="example">
@@ -214,7 +215,7 @@
 
     $.ajax({
       type: 'POST',
-      url: "{% url 'TicketsReportById' %}",
+      url: "{% url 'admin_TicketsReportById' %}",
       data: JSON.stringify(dataObject),
       contentType: "application/json",
       headers: {
@@ -268,7 +269,7 @@
 
     $.ajax({
       type: 'POST',
-      url: "{% url 'TicketsReportById' %}",
+      url: "{% url 'admin_TicketsReportById' %}",
       data: JSON.stringify(dataObject),
       contentType: "application/json",
       headers: {
@@ -322,7 +323,7 @@
 
     $.ajax({
       type: 'POST',
-      url: "{% url 'TicketsReportById' %}",
+      url: "{% url 'admin_TicketsReportById' %}",
       data: JSON.stringify(dataObject),
       contentType: "application/json",
       headers: {
@@ -331,13 +332,23 @@
 
 
       success: function (data) {
+        var total_tickets = 0;
+        var total_amount = 0;
         $('#example').empty();
         $('#example').append("<tr><th>Name</th><th>Email</th><th>Phone Number</th><th>Amount</th><th>Number of Tickets</th><th>Registration ID</th><th>Verified</th><th>Date</th></tr>")
         $.each(data, function (key, value) {
+          if (value.verify == true){
+            total_amount += parseFloat(value.amount).toFixed(2)
+            total_tickets += 1
+          }
           amount = Number(parseFloat(value.amount)).toLocaleString("en", { minimumFractionDigits: 2 })
+
+          $('#example').append('<tr><td>' + value.name + '</td><td>' + value.email + '</td><td>' + value.phone_number + '</td><td>' + Number(parseFloat(value.amount)).toLocaleString("en", { minimumFractionDigits: 2 }) + '</td><td>' + value.number_of_tickets + '</td><td>' + value.registration_id + '</td><td>' + value.verify + '</td><td>' + value.date_created + '</td></tr>');
           
-          $('#example').append('<tr><td>' + value.name + '</td><td>' + value.email + '</td><td>' + value.phone_number + '</td><td>' + value.amount + '</td><td>' + value.number_of_tickets + '</td><td>' + value.registration_id + '</td><td>' + value.verify + '</td><td>' + value.date_created + '</td></tr>');
         });
+        $('#example').append('<tr><td>' + 'Total' + '</td><td>' + '' + '</td><td>' + '' + '</td><td>' + Number(parseFloat(total_amount)).toLocaleString("en", { minimumFractionDigits: 2 }) + '</td><td>' + total_tickets + '</td><td>' + '' + '</td><td>' + '' + '</td><td>' + '' + '</td></tr>');
+        $('#total_amount').html('Total Amount' + Number(parseFloat(total_amount)).toLocaleString("en", { minimumFractionDigits: 1 }))
+        $('#total_tickets').html('Number of Tickets: ' +total_tickets)
       }
     })
 
@@ -368,7 +379,7 @@
 
     $.ajax({
       type: 'POST',
-      url: "{% url 'TicketsReportById' %}",
+      url: "{% url 'admin_TicketsReportById' %}",
       data: JSON.stringify(dataObject),
       contentType: "application/json",
       headers: {
@@ -423,7 +434,7 @@
 
     $.ajax({
       type: 'POST',
-      url: "{% url 'TicketsReportById' %}",
+      url: "{% url 'admin_TicketsReportById' %}",
       data: JSON.stringify(dataObject),
       contentType: "application/json",
       headers: {
@@ -477,7 +488,7 @@
 
     $.ajax({
       type: 'POST',
-      url: "{% url 'TicketsReportById' %}",
+      url: "{% url 'admin_TicketsReportById' %}",
       data: JSON.stringify(dataObject),
       contentType: "application/json",
       headers: {
