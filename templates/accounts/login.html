@@ -51,6 +51,13 @@
     margin:5px 5px;
     display:inline-block;
   }
+
+
+  .loginpanel-2{
+    display: none;
+  }
+
+
   </style>
 
 
@@ -71,8 +78,7 @@
 	<div class="error-pagewrap" >
 		<div class="error-page-int">
 			<div class="text-center" style="margin-bottom: 30px; padding: 20px;">
-        <a style="margin-right: 1.5rem"><button class="btn loginbtn gradient-bg">Login</button></a>
-        <a style="margin-left: 1.5rem"><button class="btn registerbtn gradient-bg">Register</button></a>
+        <a style="margin-right: 1.5rem"><button id="loginbtn" class="btn loginbtn gradient-bg">Login/Register</button></a>
       </div>
 
 
@@ -169,20 +175,12 @@
     <script>
 
       $(document).ready(function(){
-        $(".loginpanel-1").show()
-        $(".loginpanel-2").hide()
 
-
-        $('.loginbtn').click(function(){
-          $(".loginpanel-2").hide();
-          $(".loginpanel-1").fadeIn("slow");
-        })
-
-
-        $('.registerbtn').click(function(){
-          $(".loginpanel-1").hide();
-          $(".loginpanel-2").fadeIn("slow");
-        })
+        $("#loginbtn").click(function() {
+          $(".loginpanel-1").toggle();
+          $(".loginpanel-2").toggle();
+        });
+        
       });
 
     </script>

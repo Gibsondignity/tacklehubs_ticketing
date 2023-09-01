@@ -1,4 +1,5 @@
 static/
+staticfiles/
 media/
 accounts/__pycache__/
 accounts/migrations/
