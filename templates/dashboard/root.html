@@ -87,6 +87,32 @@
     })
 
 
+
+
+    $(function () {
+      $('#example2').DataTable()
+      var bookTable = $('#booklist').DataTable({
+        'paging'      : true,
+        'lengthChange': true,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : false,
+        'autoWidth'   : false,
+        'responsive'  : true,
+        'columnDefs': [
+          { "orderable": false, "targets": 0 }
+        ],
+        
+
+      })
+  
+      $('#searchBox').on('keyup', function(){
+        bookTable.search(this.value).draw();
+    });
+  
+    })
+
+
     
   </script> 
 

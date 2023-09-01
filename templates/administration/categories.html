@@ -91,7 +91,7 @@
               <h4 class="modal-title"><b>Add New Category</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="{% url 'categories' %}">
+              <form class="form-horizontal" method="POST" action="{% url 'admin_categories' %}">
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="exampleInputPassword1">Category Name</label>
@@ -137,7 +137,7 @@
               <h4 class="modal-title"><b>Edit Category</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" action="{% url 'updateCategory' %}">
+              <form class="form-horizontal" method="POST" action="{% url 'admin_updateCategory' %}">
                 {% csrf_token %}
 
                 <<input type="hidden" id="id" class="id" name="id">
@@ -184,7 +184,7 @@
               <h4 class="modal-title"><b>Delete Event</b></h4>
             </div>
             <div class="modal-body">
-              <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'deleteCategory' %}">
+              <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'admin_deleteCategory' %}">
                 {% csrf_token %}
                 Are you sure want to delete this event?
                 

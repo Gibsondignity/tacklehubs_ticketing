@@ -36,9 +36,15 @@ def home(request):
     events = Event.objects.filter(event_date__gte = today, status="Approved").order_by('-date_created')[:12]
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
-    media_url = "http://127.0.0.1:8000/media/"
-    context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
+    
+    if settings.DEBUG == True:
+        media_url = "https://tackletickets.org/media/"
+    else:
+        media_url = "http://127.0.0.1:8000/media/" 
+    
+    
+    context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
     return render(request, 'tickets/home/home.html', context)
 
@@ -53,7 +59,12 @@ def events(request):
     events = Event.objects.filter(event_date__gte = today, status="Approved")
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
-    media_url = "http://127.0.0.1:8000/media/"
+    
+    if settings.DEBUG == True:
+        media_url = "https://tackletickets.org/media/"
+    else:
+        media_url = "http://127.0.0.1:8000/media/" 
+        
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
     return render(request, 'tickets/events/events.html', context)
@@ -83,7 +94,11 @@ def event(request, id, slug):
     event = Event.objects.filter(id=id).first()
     categories = Category.objects.filter(event=event)
     
-    media_url = "http://127.0.0.1:8000/media/"
+    if settings.DEBUG == True:
+        media_url = "https://tackletickets.org/media/"
+    else:
+        media_url = "http://127.0.0.1:8000/media/" 
+        
     print("It worked", categories)
     context = {"event": event, "media_url":media_url, 'categories':categories}
     

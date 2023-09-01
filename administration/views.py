@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import datetime, timezone
 import json
 from django.shortcuts import render, redirect, reverse
 from dashboard.forms import *
@@ -8,12 +8,28 @@ from django.http import JsonResponse
 from django.conf import settings
 # Create your views here.
 
+def is_admin(request):
+    if request.user.is_superuser:
+        pass
+    else:
+        messages.error(request, 'You not eligible to access this page')
+        return redirect(reverse('login'))
+        
+
 
 @login_required()
 def admin_dashboard(request):
-
-        
-    return render(request, 'administration/dashboard.html', context={})
+    is_admin(request)
+    
+    pending_events = Event.objects.filter(status = "Pending").count()
+    approved_events = Event.objects.filter(status = "Approved").count()
+    ussd_events = UssdRequest.objects.filter(status = "True").count()
+    peding_ussd_events = UssdRequest.objects.filter(status = "False").count()
+    
+    
+    
+    context = {'pending_events':pending_events, 'approved_events':approved_events, 'ussd_events':ussd_events, 'peding_ussd_events':peding_ussd_events}
+    return render(request, 'administration/dashboard.html', context)
 
 
 
@@ -22,8 +38,19 @@ def admin_dashboard(request):
 # Events 
 @login_required()
 def admin_events(request):
-    events = Event.objects.all()
+    
+    is_admin(request)
+    
+    events = Event.objects.all().order_by('date_created')
 
+    today = datetime.now().date()
+    old_events = Event.objects.filter(event_date__lte = today, status="Approved")
+    print(old_events)
+    for event in old_events:
+        event.status = "Past"
+        event.save()
+        
+    
     context = {'events':events}
     
     return render(request, 'administration/events.html', context)
@@ -37,6 +64,9 @@ def admin_events(request):
 
 @login_required()
 def admin_updateEvent(request):
+    
+    is_admin(request)
+    
     if request.method != "POST":
         messages.error(request, "Access Denied")
     if request.method == "POST":
@@ -57,7 +87,7 @@ def admin_updateEvent(request):
             messages.error(request, "There was an error updating event")
               
 
-    return redirect(reverse("dashboard_events"))
+    return redirect(reverse("admin_dashboard_eventss"))
 
 
 
@@ -67,6 +97,8 @@ def admin_updateEvent(request):
 @login_required()
 def admin_deleteEvents(request):
     
+    is_admin(request)
+    
     id = request.POST.get('id')
     event = Event.objects.filter(id=int(id)).first()
     try:
@@ -75,7 +107,44 @@ def admin_deleteEvents(request):
     except event.DoesNotExist():
         messages.error(request, "There was an error deleteing this event!")
     
-    return redirect(reverse("dashboard_event"))
+    return redirect(reverse("admin_dashboard_events"))
+
+
+
+
+@login_required()
+def change_event_status(request):
+    
+    is_admin(request)
+    
+    id = request.POST.get('id')
+    event = Event.objects.filter(id=int(id)).first()
+    try:
+        Event.objects.filter(id=int(id)).update(status='Approved')
+        messages.success(request, "Event updated successfully!")
+    except event.DoesNotExist():
+        messages.error(request, "There was an error updating this event!")
+    
+    return redirect(reverse("admin_dashboard_events"))
+
+
+
+
+
+@login_required()
+def reject_event(request):
+    
+    is_admin(request)
+    
+    id = request.POST.get('id')
+    event = Event.objects.filter(id=int(id)).first()
+    try:
+        Event.objects.filter(id=int(id)).update(status='Rejected')
+        messages.success(request, "Event rejected successfully!")
+    except event.DoesNotExist():
+        messages.error(request, "There was an error updating this event!")
+    
+    return redirect(reverse("admin_dashboard_events"))
 
 
 
@@ -85,6 +154,9 @@ def admin_deleteEvents(request):
 
 @login_required()
 def admin_getEvents(request):
+    
+    is_admin(request)
+    
     id = request.GET.get('id')
     context = {}
     try:
@@ -115,8 +187,11 @@ def admin_getEvents(request):
 # Categories
 @login_required()
 def admin_categories(request):
+    
+    is_admin(request)
+    
     form = CategoryForm()
-    categories = Category.objects.all()
+    categories = Category.objects.all().order_by('date_created')
     
     events = Event.objects.all()
     #print(events)
@@ -127,7 +202,7 @@ def admin_categories(request):
             user.user = request.user
             user.save()
             messages.success(request, "Event created successfully!")
-            return redirect(reverse('categories'))
+            return redirect(reverse('admin_categories'))
         else:
             messages.error(request, "Event could not be created!")
     
@@ -144,6 +219,9 @@ def admin_categories(request):
 
 @login_required()
 def admin_updateCategory(request):
+    
+    is_admin(request)
+    
     if request.method != "POST":
         messages.error(request, "Access Denied")
     if request.method == "POST":
@@ -160,7 +238,7 @@ def admin_updateCategory(request):
             messages.error(request, "Category updated successfully!")
               
 
-    return redirect(reverse("categories"))
+    return redirect(reverse("admin_categories"))
 
 
 
@@ -168,6 +246,8 @@ def admin_updateCategory(request):
 
 @login_required()
 def admin_deleteCategory(request):
+    
+    is_admin(request)
     
     id = request.POST.get('id')
     category = Category.objects.filter(id=int(id)).first()
@@ -177,7 +257,7 @@ def admin_deleteCategory(request):
     except category.DoesNotExist():
         messages.error(request, "There was an error deleteing this category!")
     
-    return redirect(reverse("categories"))
+    return redirect(reverse("admin_categories"))
 
 
 
@@ -185,6 +265,8 @@ def admin_deleteCategory(request):
 
 @login_required() 
 def admin_getCategories(request):
+    
+    is_admin(request)
     
     context = {}
     try:
@@ -210,6 +292,9 @@ def admin_getCategories(request):
 
 @login_required()
 def admin_ussd(request):
+    
+    is_admin(request)
+    
     form = UssdRequestForm()
     ussd_requests = UssdRequest.objects.all()
     
@@ -220,7 +305,7 @@ def admin_ussd(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Request sent successfully. We will contact you within two working days.")
-            return redirect(reverse('dashboard_ussd'))
+            return redirect(reverse('admin_dashboard_ussd'))
         else:
             messages.error(request, "Sorry! There was an issue requesting for USSD. Please try again later.")
     
@@ -235,6 +320,8 @@ def admin_ussd(request):
 
 @login_required()
 def admin_profile(request):
+    
+    is_admin(request)
     
     user = request.user
     user_bank_details = BankAccounts.objects.filter(user=user).first()
@@ -273,6 +360,8 @@ def admin_profile(request):
 @login_required()
 def admin_UserInformation(request):
 
+    is_admin(request)
+    
     user = request.user
     user_info = UserInfo.objects.filter(user=user).first()
         
@@ -297,6 +386,7 @@ def admin_UserInformation(request):
 @login_required()
 def admin_ticket_reservations(request):
     
+    is_admin(request)
     
     tickets = Ticket.objects.all()
     categories = Category.objects.all()
@@ -308,6 +398,8 @@ def admin_ticket_reservations(request):
 
 @login_required()
 def admin_TicketsReportById(request):
+    
+    is_admin(request)
     
     if request.method == "POST":  
         json_data = json.loads(request.body)

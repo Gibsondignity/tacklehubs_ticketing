@@ -3,113 +3,122 @@
 {% block content %}
 
 <div class="content-wrapper">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="home-tab">
-          <div class="d-sm-flex align-items-center justify-content-between border-bottom">
-            <ul class="nav nav-tabs" role="tablist">
-              <li class="nav-item">
-                  <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="{% url 'dashboard' %}" role="tab" aria-controls="overview" aria-selected="true">Dashboard</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="{% url 'dashboard_events' %}" role="tab" aria-selected="false">Event</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="{% url 'categories' %}" role="tab" aria-selected="false">Categories</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="{% url 'dashboard_ussd' %}" role="tab" aria-selected="false">USSD</a>
-              </li>
-              </ul>
-            <div>
-              <div class="btn-wrapper">
-                <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
-                <a href="#" class="btn btn-otline-dark"><i class="icon-printer"></i> Print</a>
-                <a href="#" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export</a>
-              </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="home-tab">
+        <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="{% url 'dashboard' %}" role="tab"
+                aria-controls="overview" aria-selected="true">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="{% url 'dashboard_events' %}" role="tab"
+                aria-selected="false">Event</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="{% url 'categories' %}" role="tab"
+                aria-selected="false">Categories</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link border-0" id="more-tab" data-bs-toggle="tab" href="{% url 'dashboard_ussd' %}"
+                role="tab" aria-selected="false">USSD</a>
+            </li>
+          </ul>
+          <div>
+            <div class="btn-wrapper">
+              <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
+              <a href="#" class="btn btn-otline-dark"><i class="icon-printer"></i> Print</a>
+              <a href="#" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export</a>
             </div>
           </div>
-          <div class="tab-content tab-content-basic">
-            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="statistics-details d-flex align-items-center justify-content-between">
-                    <div>
-                      <p class="statistics-title">Total Events</p>
-                      <h3 class="rate-percentage">0</h3>
-                      
-                    </div>
-                    <div>
-                      <p class="statistics-title">Total Categories</p>
-                      <h3 class="rate-percentage">0</h3>
-                      
-                    </div>
-                    <div>
-                      <p class="statistics-title">USSD Requests</p>
-                      <h3 class="rate-percentage">0</h3>
-                      
-                    </div>
-                    <div class="d-none d-md-block">
-                      <p class="statistics-title">Total Amount</p>
-                      <h3 class="rate-percentage">0</h3>
-                      
-                    </div>
-                    <div class="d-none d-md-block">
-                      <p class="statistics-title">Total Bookings</p>
-                      <h3 class="rate-percentage">0</h3>
-                      
-                    </div>
-                    
+        </div>
+        <div class="tab-content tab-content-basic">
+          <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="statistics-details d-flex align-items-center justify-content-between">
+                  <div>
+                    <p class="statistics-title">Total Pending Events</p>
+                    <h3 class="rate-percentage">{{pending_events}}</h3>
+
                   </div>
-                </div>
-              </div> 
-              
-                
-              <div class="row">
-                <div class="col-lg-6 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title"> </h4>
-                      <canvas id="lineChart"></canvas>
-                    </div>
+                  <div>
+                    <p class="statistics-title">Total Approve Events</p>
+                    <h3 class="rate-percentage">{{approved_events}}</h3>
+
                   </div>
-                </div>
-                <div class="col-lg-6 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title"> </h4>
-                      <canvas id="barChart"></canvas>
-                    </div>
+                  {% comment %} <div>
+                    <p class="statistics-title">Total Categories</p>
+                    <h3 class="rate-percentage">0</h3>
+
+                  </div> {% endcomment %}
+                  <div>
+                    <p class="statistics-title">Pending USSD Requests</p>
+                    <h3 class="rate-percentage">{{peding_ussd_events}}</h3>
+
                   </div>
+                  {% comment %} <div class="d-none d-md-block">
+                    <p class="statistics-title">Total Amount</p>
+                    <h3 class="rate-percentage">0</h3>
+
+                  </div> {% endcomment %}
+                 <div class="d-none d-md-block">
+                    <p class="statistics-title">Approved USSD Requests</p>
+                    <h3 class="rate-percentage">{{ussd_events}}</h3>
+
+                  </div> 
+
                 </div>
               </div>
-              <div class="row">
-                <div class="col-lg-6 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title"></h4>
-                      <canvas id="areaChart"></canvas>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title"></h4>
-                      <canvas id="areaChart"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
             </div>
+
+
+            <div class="row">
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title"> </h4>
+                    <canvas id="lineChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title"> </h4>
+                    <canvas id="barChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    <canvas id="areaChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    <canvas id="areaChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-
-
-    
   </div>
+
+
+
+</div>
 
 {% endblock content %}

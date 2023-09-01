@@ -18,6 +18,8 @@ urlpatterns = [
     # Upadate
     path('administration/updateEvent', views.admin_updateEvent, name='admin_updateEvent'),
     path('administration/updateCategory', views.admin_updateCategory, name='admin_updateCategory'),
+    path('administration/change_event_status', views.change_event_status, name='change_event_status'),
+    path('administration/reject_event', views.reject_event, name='reject_event'),
     
     
     # delete
