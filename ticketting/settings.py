@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-v6v!(p=*k$eed+te7e_^@1s^k4)26gc5o+#oiuz8dqwi-e)ehc'
+
+
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,6 +35,17 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = "login"
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Replace with your broker URL
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'send-periodic-email-every-10-minutes': {
+        'task': 'tasks.send_periodic_email',
+        'schedule': timedelta(minutes=10),
+    },
+}
+
+
 
 # Application definition
 
@@ -131,9 +148,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 # Default primary key field type
@@ -142,15 +159,36 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-PAYSTACK_SECRET_KEY = "sk_test_60f48dab304e54252bdd5da374a980063b2b5d73"
-PAYSTACK_PUBLIC_KEY = "pk_test_a995b2587e7d472849f75c3d88699b2464f4c8d2"
+PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 
 
 
 # # Email configuration
-EMAIL_HOST = 'smtp.webmail.com'
-EMAIL_HOST_USER = 'ticket@tacklehubs.com'
-EMAIL_HOST_PASSWORD = 'TackleHubsTicket'
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 465
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+
+
+
+# SMS 
+API_KEY = config('API_KEY') #Remember to put your account API Key here
+PHONE = config('PHONE') #International format (233) excluding the (+)
+MESSAGE = config('MESSAGE')
+SENDER_ID = config('NiBS') #11 Characters maximum
+DATE_TIME = "2017-05-02 00:59:00"
+
+
+
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BROKER_URL = 'redis://default:S2u5U269J9LMFftvQipR9rEs84MVaVNh@redis-18365.c274.us-east-1-3.ec2.cloud.redislabs.com:18365'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
