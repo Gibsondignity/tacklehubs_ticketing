@@ -3,247 +3,72 @@
 from django.conf import settings
 from celery import shared_task
 from django.core.mail import send_mail
-
-import email
-from urllib import request
-from .models import Account
-from accounts.models import Users
 from django.http import Http404
 from django.template.loader import render_to_string 
 from django.core.mail import EmailMessage, get_connection
 from django.shortcuts import render, redirect, reverse
-
-
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+import urllib.request
+import time
+
 
 @shared_task
-def your_task():
-    # Your task logic here
-    result = perform_task()
+# Send SMS
+def send_sms_with_celery(phone, name):
     
-    # After task completion, send email and SMS notification
-    send_email_notification.delay()
-    send_sms_notification.delay()
-
+    phone = str(phone)
+    
+    try:
+        if phone[0] == '+':
+            phone= phone[1:].replace(' ', '')
+        else:
+            phone = phone.replace(' ', '')
+    except:
+        pass
+        
+    
+    message = f'''Hello%20{name}.%20Thank%20you%20for%20submitting%20your%20application!%20We%20have%20received%20it%20and%20will%20review%20it%20carefully.%20You%20will%20hear%20from%20us%20soon%20regarding%20the%20next%20steps.%20Your%20Application%20ID%20is:%20.%20Have%20a%20great%20day!'''
+    content = f"https://sms.textcus.com/api/send?apikey=Zu6MKbqA5DaL5awJPl0Nxa8bvYbDFeuT&destination={phone}&source=NiBS&dlr=1&type=0&message={message}"
+    #print(content)
+    #response = urllib.request.urlopen("https://sms.textcus.com/api/send?apikey=Zu6MKbqA5DaL5awJPl0Nxa8bvYbDFeuT&destination=233245534524&source=NiBS&dlr=1&type=0&message=%20Thank%20you%20for%20completing%20your%20Application%20with%20Nobel%20International%20Business%20School.%20Your%20Application%20ID%20is:%20NIBS21024.%20This%20email%20confirms%20that%20your%20application%20has%20been%20received.%20We%20will%20review%20it%20and%20get%20back%20to%20you%20as%20soon%20as%20possible.%20In%20the%20meantime,%20if%20you%20have%20any%20questions,%20email%20us%20at%20apply@nibs.edu.gh,%20and%20we%27ll%20be%20happy%20to%20help%20you.%20Sincerely,%20Nobel%20International%20Business%20School.%20NiBS%20Admissions%20Team.").read()
+    try:
+        urllib.request.urlopen(content)
+    except:
+        pass
+    
+    
+  
+  
 @shared_task
-def send_email_notification():
-    # Send email notification
-    send_mail('Task Completed', 'Your task has been completed successfully.', 'from@example.com', ['to@example.com'])
-
-@shared_task
-def send_sms_notification():
-    # Send SMS notification using Twilio or any other service
-    client = Client("TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN")
-    message = client.messages.create(body="Your task has been completed successfully.", from_="YOUR_TWILIO_NUMBER", to="RECIPIENT_NUMBER")
-
-
-
-
-    
-def book_email(receiver_email, first_name, contact, date, book_status):
-    
-    sender_email = "election@cemswiss.com"
-    # receiver_email = "gibsondignty@gmail.com"
-    password = "Gibson@2022" 
-
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "EasyRent Ghana Appartment Viewing"
-    message["From"] = sender_email
-    message["To"] = receiver_email   
-    
-    html_file = "templated_email/book.html"
-    html_content = render_to_string(html_file, 
-       context={
-            'name': first_name,
-            'email':receiver_email,
-            'contact':contact,
-            'date': date,
-            'book_status': book_status
-        },    
-    )
-
-     # Turn these into plain/html MIMEText objects
-    msg = MIMEText(html_content, "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-
-    message.attach(msg)
-
-    # Create secure connection with server and send email
-    # context = ssl.create_default_context()
-    
-    try:
-        with smtplib.SMTP_SSL("mail.cemswiss.com", 465) as server:
-            server.login(sender_email, password)
-            # print(logintest)
-            server.sendmail(
-                sender_email, receiver_email, message.as_string()
-            )
-    except Exception as e:
-        # print(e)
-        pass
-        # return Response(e.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-    
-    
-    
-def tenant_email(receiver_email, first_name, tenant_status):
+def send_email_with_celery(email, message, subject):
     
     sender_email = settings.EMAIL_HOST_USER
-    password = settings.EMAIL_HOST_PASSWORD
+    to = email
     
-    if tenant_status == "registered":
-        subject = "EasyRent Account Registration"
-    elif tenant_status == "Approved":
-        subject = "Your Account has been Approved"
-    elif tenant_status == "renewal":
-        subject = "Your application has been Successfully Renewed"
-    else:
-        subject = "EasyRent Ghana"
-    
-    
-    message = MIMEMultipart("alternative")
-    message["Subject"] = subject
-    message["From"] = sender_email
-    message["To"] = receiver_email   
-    
-    html_file = "templated_email/tenant.html"
-    html_content = render_to_string(html_file, 
-       context={
-            'name': first_name,
-            'email':receiver_email,
-            'tenant_status': tenant_status
-        },    
+    # Send email using Django's send_mail function
+    send_mail(
+        subject,
+        message,
+        sender_email,
+        [to],
+        fail_silently=False,
     )
-
-     # Turn these into plain/html MIMEText objects
-    msg = MIMEText(html_content, "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-
-    message.attach(msg)
-
-    # Create secure connection with server and send email
-    # context = ssl.create_default_context()
-    
-    try:
-        with smtplib.SMTP_SSL("mail.easyrentgh.com", 465) as server:
-            server.login(sender_email, password)
-            # print(logintest)
-            server.sendmail(
-                sender_email, receiver_email, message.as_string()
-            )
-    except Exception as e:
-        # print(e)
-        # return Response(e.errors, status=status.HTTP_400_BAD_REQUEST)
-        pass
     
     
-
-def application_status_email(receiver_email, first_name, tenant_status, comment, status):
+    # d = { 'name': name, 'application_id': application_id, 'application_status':application_status }
     
-    sender_email = settings.EMAIL_HOST_USER
-    password = settings.EMAIL_HOST_PASSWORD
+    # #text_content = plaintext.render(d)
+    # htmly = get_template('new_email.html')
     
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "EasyRent Application Status"
-    message["From"] = sender_email
-    message["To"] = receiver_email   
+    # html_content = htmly.render(d)
+    # msg = EmailMultiAlternatives(subject, plaintext, from_email, [to])
     
-    html_file = "templated_email/tenant.html"
-    html_content = render_to_string(html_file, 
-       context={
-            'name': first_name,
-            'email':receiver_email,
-            'tenant_status': tenant_status,
-            'comment': comment,
-            'status': status
-        },    
-    )
-
-     # Turn these into plain/html MIMEText objects
-    msg = MIMEText(html_content, "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-
-    message.attach(msg)
-
-    # Create secure connection with server and send email
-    # context = ssl.create_default_context()
+    # msg.attach_alternative(html_content, "text/html")
     
-    try:
-        with smtplib.SMTP_SSL("mail.easyrentgh.com", 465) as server:
-            server.login(sender_email, password)
-            # print(logintest)
-            server.sendmail(
-                sender_email, receiver_email, message.as_string()
-            )
-    except Exception as e:
-        # print(e)
-        # return Response(e.errors, status=status.HTTP_400_BAD_REQUEST)
-        pass
-    
-    
-
-
-# admin email
-def admin_email(admin_status, name, typeOfRoom, preferedLocation, budgetedMonthlyRent):
-    
-    sender_email = settings.EMAIL_HOST_USER
-    password = settings.EMAIL_HOST_PASSWORD
-    receiver_email = "gibsondignty@gmail.com"
-    
-    if admin_status == "new":
-        subject = "Renter Seeking an Apartment"
-    
-    
-    message = MIMEMultipart("alternative")
-    message["Subject"] = subject
-    message["From"] = sender_email
-    message["To"] = receiver_email
-    
-    html_file = "templated_email/admin.html"
-    html_content = render_to_string(html_file, 
-       context={
-            'email': receiver_email,
-            'admin_status': admin_status,
-            'name': name,
-            'typeOfRoom': typeOfRoom,
-            'preferedLocation': preferedLocation,
-            'budgetedMonthlyRent': budgetedMonthlyRent, 
-        },    
-    )
-
-     # Turn these into plain/html MIMEText objects
-    msg = MIMEText(html_content, "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-
-    message.attach(msg)
-
-    # Create secure connection with server and send email
-    # context = ssl.create_default_context()
-    
-    try:
-        with smtplib.SMTP_SSL("mail.easyrentgh.com", 465) as server:
-            server.login(sender_email, password)
-            # print(logintest)
-            server.sendmail(
-                sender_email, receiver_email, message.as_string()
-            )
-    except Exception as e:
-        # print(e)
-        # return Response(e.errors, status=status.HTTP_400_BAD_REQUEST)
-        pass
-    
-    
-    
-
+    # try:
+    #     msg.send()
+    # except:
+    #     pass
