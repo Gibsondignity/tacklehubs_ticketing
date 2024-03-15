@@ -167,7 +167,7 @@
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
           <i class="menu-icon mdi mdi-account-circle-outline"></i>
-          <span class="menu-title"></span>
+          <span class="menu-title">Profile Setup</span>
           <i class="menu-arrow"></i>
         </a>
         <div class="collapse" id="auth">
@@ -175,10 +175,15 @@
             <li class="nav-item"> <a class="nav-link" href="{% url 'profile' %}">My Profile </a></li>
           </ul>
           <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="{% url 'logout' %}"> Logout </a></li>
+            <li class="nav-item"> <a class="nav-link" href="{% url 'profile' %}">Bank Accounts </a></li>
           </ul>
         </div>
       </li>
+
+      <li class="nav-item">
+          <li class="nav-item"> <a class="nav-link" href="{% url 'logout' %}"> Logout </a></li>
+      </li>
+      
     </ul>
     {% endif %}
   </nav>

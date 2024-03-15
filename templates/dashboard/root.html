@@ -63,57 +63,25 @@
 
 
   <script>
-    $(function () {
-      $('#example1').DataTable()
-      var bookTable = $('#booklist').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
-        'searching'   : true,
-        'ordering'    : true,
-        'info'        : false,
-        'autoWidth'   : false,
-        'responsive'  : true,
-        'columnDefs': [
-          { "orderable": false, "targets": 0 }
-        ],
-        
-
-      })
-  
-      $('#searchBox').on('keyup', function(){
-        bookTable.search(this.value).draw();
-    });
-  
-    })
-
-
-
-
-    $(function () {
-      $('#example2').DataTable()
-      var bookTable = $('#booklist').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
-        'searching'   : true,
-        'ordering'    : true,
-        'info'        : false,
-        'autoWidth'   : false,
-        'responsive'  : true,
-        'columnDefs': [
-          { "orderable": false, "targets": 0 }
-        ],
-        
-
-      })
-  
-      $('#searchBox').on('keyup', function(){
-        bookTable.search(this.value).draw();
-    });
-  
-    })
-
-
     
+    $(document).ready(function() {
+      $('#example1').DataTable( {
+          dom: 'Bfrtip',
+          buttons: [
+              'copy', 'csv', 'excel', 'pdf', 'print'
+          ]
+      } );
+  } );
+
+
+  $(document).ready(function() {
+    $('#example2').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
   </script> 
 
 
