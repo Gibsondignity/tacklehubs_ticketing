@@ -3,14 +3,13 @@ import os
 from celery import Celery
 
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'easyrentproject.settings')
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cfehome.settings')
 
-app = Celery('cfehome')
+app = Celery('easyrentproject')
 
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 
-app.autodiscover_tasks()
-
+app.autodiscover_tasks() 
