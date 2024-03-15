@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
+
+from dashboard.models import *
 from .backend_email import EmailBackend
 from django.contrib import messages
 from django.conf import settings
@@ -58,8 +60,14 @@ def account_login(request):
                 messages.success(request, "You're logged in as an admin")
                 return redirect(reverse("administration"))     
             else:
-                messages.success(request, "Login successfull")
+                bank = BankAccounts.objects.filter(user=user).first()
+                userinfo = UserInfo.objects.filter(user=user).first()
                 
+                if not bank or not userinfo:
+                    messages.success(request, "Please finish setting up your profile")
+                    return redirect(reverse("profile"))
+                
+                messages.success(request, "Login successfull")
                 return redirect(reverse("dashboard"))   
         else:
             messages.error(request, "User not found")
