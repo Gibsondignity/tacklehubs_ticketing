@@ -59,6 +59,7 @@ def account_login(request):
                 return redirect(reverse("administration"))     
             else:
                 messages.success(request, "Login successfull")
+                
                 return redirect(reverse("dashboard"))   
         else:
             messages.error(request, "User not found")
