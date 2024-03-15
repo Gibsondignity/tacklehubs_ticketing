@@ -12,7 +12,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import decimal
 from dashboard.task import send_email, send_sms
+from decouple import config
 
+
+url = config('URL')
 
 
 # Create your views here.
@@ -38,11 +41,7 @@ def home(request):
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     
-    
-    if settings.DEBUG == True:
-        media_url = "https://tackletickets.org/media/"
-    else:
-        media_url = "http://127.0.0.1:8000/media/" 
+    media_url = f"http://{{url}}/media/" 
     
     
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
@@ -63,10 +62,7 @@ def events(request):
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     
-    if settings.DEBUG == True:
-        media_url = "https://tackletickets.org/media/"
-    else:
-        media_url = "http://127.0.0.1:8000/media/" 
+    media_url = f"http://{{url}}/media/" 
         
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
@@ -97,10 +93,7 @@ def event(request, id, slug):
     event = Event.objects.filter(id=id).first()
     categories = Category.objects.filter(event=event)
     
-    if settings.DEBUG == True:
-        media_url = "https://tackletickets.org/media/"
-    else:
-        media_url = "http://127.0.0.1:8000/media/" 
+    media_url = f"http://{{url}}/media/"  
         
     print("It worked", categories)
     context = {"event": event, "media_url":media_url, 'categories':categories}
@@ -157,7 +150,6 @@ def initiate_payment(request):
 def verify_payment(request, ref: str) -> HttpResponse:
     payment = get_object_or_404(Ticket, ref=ref)
     registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
-    print(registration_id)
   
     verified = payment.verify_payment()
     
@@ -168,9 +160,6 @@ def verify_payment(request, ref: str) -> HttpResponse:
         send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
         send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
         
-        
-    
-    
     return redirect('/')
 
 

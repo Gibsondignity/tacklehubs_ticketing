@@ -79,6 +79,23 @@ def send_email(id, name, email, number_of_tickets):
     
     
     
+    
+@shared_task
+def verify_all_payment():
+    
+    payment = Ticket.objects.filter()
+    registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
+  
+    verified = payment.verify_payment()
+    
+    if verified:
+        Ticket.objects.filter(ref=ref).update(registration_id=registration_id)
+        first_name = payment.name.split(" ")[0]
+        send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
+        send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
+        
+    return redirect('/')
+    
 @shared_task
 def set_past_event_status():
     today = datetime.now().date()
