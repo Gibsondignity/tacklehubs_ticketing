@@ -8,19 +8,17 @@ from django.http import JsonResponse
 from django.conf import settings
 # Create your views here.
 
+from decouple import config
+
+
+domain = config('URL')
+protocol = config('PROTOCOL')
+
 
 @login_required()
 def dashboard(request):
-    if settings.DEBUG == False:
-        domain = 'tackletickets.org'
-        protocol = 'https'
-    else:
-        protocol = 'http'
-        domain = '127.0.0.1:8000'
-        
-    #print(protocol, domain)
-        
-    return render(request, 'dashboard/dashboard/dashboard.html', context={})
+ 
+    return render(request, 'dashboard/dashboard/dashboard.html', context={'domain':domain, 'protocol':protocol})
 
 
 
@@ -123,10 +121,9 @@ def getEvents(request):
         context['description'] = event.description
         context['starting_price'] = event.starting_price
         context['location'] = event.location
-        if settings.DEBUG == True:
-            context['picture'] = "http://localhost:8000" + event.picture.url
-        else:
-            context['picture'] = "https://tackletickets.org" + event.picture.url
+
+        context['picture'] = f"{protocol}://{domain}" + event.picture.url
+
     except:
         messages.error(request, "There was an error fetching data!")
         

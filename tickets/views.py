@@ -11,7 +11,7 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import decimal
-from dashboard.task import send_email, send_sms
+from dashboard.task import send_email, send_sms, verify_payment_task
 from decouple import config
 
 
@@ -41,8 +41,7 @@ def home(request):
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     
-    media_url = f"http://{{url}}/media/" 
-    
+    media_url = f"http://{url}/media/" 
     
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
@@ -62,7 +61,7 @@ def events(request):
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     
-    media_url = f"http://{{url}}/media/" 
+    media_url = f"http://{url}/media/" 
         
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
@@ -93,7 +92,7 @@ def event(request, id, slug):
     event = Event.objects.filter(id=id).first()
     categories = Category.objects.filter(event=event)
     
-    media_url = f"http://{{url}}/media/"  
+    media_url = f"http://{url}/media/"  
         
     print("It worked", categories)
     context = {"event": event, "media_url":media_url, 'categories':categories}
@@ -148,17 +147,8 @@ def initiate_payment(request):
 
 
 def verify_payment(request, ref: str) -> HttpResponse:
-    payment = get_object_or_404(Ticket, ref=ref)
-    registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
-  
-    verified = payment.verify_payment()
-    
-    if verified:
-        messages.success(request, "Ticket reservation was successful! Please wait while we process your sms and email.")
-        Ticket.objects.filter(ref=ref).update(registration_id=registration_id)
-        first_name = payment.name.split(" ")[0]
-        send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
-        send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
+    messages.success(request, 'Thank you for for your ticket reservation. Please wait while we process your ticket.')
+    verify_payment_task(ref).delay() # Calling the function as
         
     return redirect('/')
 

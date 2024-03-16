@@ -6,19 +6,26 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.conf import settings
+from decouple import config
 # Create your views here.
+
+
+domain = config('URL')
+protocol = config('PROTOCOL')
+
 
 def is_admin(request):
     if request.user.is_superuser:
         pass
     else:
-        messages.error(request, 'You not eligible to access this page')
+        messages.error(request, 'You are not eligible to access this page')
         return redirect(reverse('login'))
         
 
 
 @login_required()
 def admin_dashboard(request):
+    
     is_admin(request)
     
     pending_events = Event.objects.filter(status = "Pending").count()
@@ -41,17 +48,35 @@ def admin_events(request):
     
     is_admin(request)
     
-    events = Event.objects.all().order_by('date_created')
-
-    today = datetime.now().date()
-    old_events = Event.objects.filter(event_date__lte = today, status="Approved")
-    print(old_events)
-    for event in old_events:
-        event.status = "Past"
-        event.save()
-        
+    events = Event.objects.all()
+    approved = Event.objects.filter(status="Approved")
+    pending = Event.objects.filter(status="Pending")
+    past_n_rejected_events = Event.objects.filter(status="Past" or "Rejected")
     
-    context = {'events':events}
+    if request.method == "POST":
+        form = EventForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            
+            user = form.save(commit=False)
+            user.user = request.user
+            
+            user.save()
+            
+            messages.success(request, "Event created successfully!")
+            return redirect(reverse('dashboard_events'))
+        else:
+            messages.error(request, "Event could not be created!")
+    
+    today = datetime.now().date()
+    Event.objects.filter(event_date__lte = today, status="Approved").update(status = "Past")
+        
+    form = EventForm()
+    context = {'events': events, 
+               'approved': approved,
+               'pending': pending,
+               'form': form,
+               'past_n_rejected_events': past_n_rejected_events,
+            }
     
     return render(request, 'administration/events.html', context)
 
@@ -87,7 +112,7 @@ def admin_updateEvent(request):
             messages.error(request, "There was an error updating event")
               
 
-    return redirect(reverse("admin_dashboard_eventss"))
+    return redirect(reverse("admin_dashboard_events"))
 
 
 
@@ -169,10 +194,8 @@ def admin_getEvents(request):
         context['description'] = event.description
         context['starting_price'] = event.starting_price
         context['location'] = event.location
-        if settings.DEBUG == True:
-            context['picture'] = "http://localhost:8000" + event.picture.url
-        else:
-            context['picture'] = "https://tackletickets.org" + event.picture.url
+
+        context['picture'] = f"{protocol}://{domain}" + event.picture.url
     except:
         messages.error(request, "There was an error fetching data!")
         

@@ -4,10 +4,10 @@ from datetime import datetime
 from django.conf import settings
 from celery import shared_task
 from django.core.mail import send_mail
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.template.loader import render_to_string 
 from django.core.mail import EmailMessage, get_connection
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import get_object_or_404, render, redirect, reverse
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -37,7 +37,6 @@ def send_sms(phone, id, name, number_of_tickets):
     
     message = f'''Hello%20{name}.%20Thank%20you%20for%20reserving%20your%20ticket!.%20Your%20ticket%20number%20is:%20{id}.%20Number%20of%20tickets:%20{number_of_tickets}.%20Have%20a%20great%20day!'''
     content = f"https://sms.textcus.com/api/send?apikey=PqdIBy2psAhIqkH9c5AEgRL8YcZPovcn&destination={phone}&source=ThankYou!&dlr=1&type=0&message={message}"
-    print(content)
     try: 
         response = urllib.request.urlopen(content)
     except:
@@ -79,11 +78,27 @@ def send_email(id, name, email, number_of_tickets):
     
     
     
+@shared_task  
+def verify_payment_task(ref):
+    payment = get_object_or_404(Ticket, ref=ref)
+    registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
+  
+    verified = payment.verify_payment()
+    
+    if verified:
+        Ticket.objects.filter(ref=ref).update(registration_id=registration_id)
+        first_name = payment.name.split(" ")[0]
+        send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
+        send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
+        
+
+
     
 @shared_task
 def verify_all_payment():
     
     payment = Ticket.objects.filter()
+    ticket = Ticket.objects.filter()
     registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
   
     verified = payment.verify_payment()
