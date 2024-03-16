@@ -51,8 +51,15 @@ def admin_events(request):
     events = Event.objects.all()
     approved = Event.objects.filter(status="Approved")
     pending = Event.objects.filter(status="Pending")
-    past_n_rejected_events = Event.objects.filter(status="Past" or "Rejected")
+    past_n_rejected_events = Event.objects.filter()
+    past_n_rejected_event = []
     
+    for event in past_n_rejected_events:
+        if event.status == 'Past' or event.status == 'Rejected':
+            past_n_rejected_event.append(event)
+        else:
+            pass
+            
     if request.method == "POST":
         form = EventForm(request.POST or None, request.FILES or None)
         if form.is_valid():
@@ -75,13 +82,25 @@ def admin_events(request):
                'approved': approved,
                'pending': pending,
                'form': form,
-               'past_n_rejected_events': past_n_rejected_events,
+               'past_n_rejected_events': past_n_rejected_event,
             }
     
     return render(request, 'administration/events.html', context)
 
 
 
+
+
+@login_required
+def view_event_tickets(request, slug, id):
+    event = Event.objects.filter(id=id).first()
+    tickets = event.ticket_set.all()
+    total_verified = tickets.filter(verify=True).count()
+    total_unverified = tickets.filter(verify=False).count()
+    print(total_verified)
+    context = {'event': event, 'tickets': tickets, 'total_verified': total_verified, 'total_unverified': total_unverified}
+    
+    return render(request, 'administration/event_details.html', context)
 
 
 
@@ -477,5 +496,10 @@ def admin_TicketsReportById(request):
     else:
         return JsonResponse({"error": "Method not allowed"}, status=400)
     
+    
+    
+
+
+
     
     

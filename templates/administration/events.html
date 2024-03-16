@@ -116,8 +116,10 @@
                 <td>{{event.status}}</td>
                 {% comment %} <td>{{event.date_created}}</td> {% endcomment %}
                 <td>
-                  <button class=' btn-info reject btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
-                  </button>
+                  <a href="{% url 'event_details' event.slug event.id %}">
+                    <button class=' btn-info btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
+                    </button>
+                  </a>
 
                   <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
                       class='mdi mdi-table-edit'></i></button>
@@ -174,8 +176,10 @@
                 <td>{{event.status}}</td>
 
                 <td>
-                  <button class=' btn-info reject btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
-                  </button>
+                  <a href="{% url 'event_details' event.slug event.id %}">
+                    <button class=' btn-info btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
+                    </button>
+                  </a>
 
                   <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
                       class='mdi mdi-table-edit'></i></button>
@@ -234,8 +238,10 @@
                 <td>{{event.status}}</td>
 
                 <td>
-                  <button class=' btn-info reject btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
-                  </button>
+                  <a href="{% url 'event_details' event.slug event.id %}">
+                    <button class=' btn-info btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
+                    </button>
+                  </a>
 
                   <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
                       class='mdi mdi-table-edit'></i></button>
