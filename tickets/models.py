@@ -101,7 +101,6 @@ class Ticket(models.Model):
         Paybox = PayStack()
         status, result = Paybox.verify_payment(self.ref)
         if status:
-            print(result['amount'])
             if result['amount'] == self.amount*100:
                 self.verify = True
             self.save()

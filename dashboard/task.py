@@ -1,6 +1,6 @@
 # tasks.py
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.conf import settings
 from celery import shared_task
 from django.core.mail import send_mail
@@ -11,6 +11,8 @@ from django.shortcuts import get_object_or_404, render, redirect, reverse
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from django.utils import timezone
+
 
 from tickets.models import *
 
@@ -18,7 +20,7 @@ import urllib.request
 import time
 
 
-@shared_task
+@shared_task(bind=True)
 def send_sms(phone, id, name, number_of_tickets):
     
     phone = str(phone)
@@ -44,7 +46,7 @@ def send_sms(phone, id, name, number_of_tickets):
     
     
     
-@shared_task   
+@shared_task(bind=True)  
 def send_email(id, name, email, number_of_tickets):
     
     subject = 'Ticket Reservation'
@@ -78,7 +80,7 @@ def send_email(id, name, email, number_of_tickets):
     
     
     
-@shared_task  
+@shared_task(bind=True)
 def verify_payment_task(ref):
     payment = get_object_or_404(Ticket, ref=ref)
     registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
@@ -96,21 +98,26 @@ def verify_payment_task(ref):
     
 @shared_task
 def verify_all_payment():
+    # Get payments to verify
+    twenty_four_hours_ago = timezone.now() - timedelta(hours=24)
+    payments = Ticket.objects.filter(verify=False, date_created__gte=twenty_four_hours_ago)
     
-    payment = Ticket.objects.filter()
-    ticket = Ticket.objects.filter()
-    registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
-  
-    verified = payment.verify_payment()
-    
-    if verified:
-        Ticket.objects.filter(ref=ref).update(registration_id=registration_id)
-        first_name = payment.name.split(" ")[0]
-        send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
-        send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
+    for payment in payments:
+        registration_id = f"{payment.event.event_name[0]}{payment.category.category_name[0]}{payment.event.id}{payment.id}"
+        verified = payment.verify_payment()
+        if verified:
+            Ticket.objects.filter(ref=payment.ref).update(registration_id=registration_id)
+            first_name = payment.name.split(" ")[0]
+            send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
+            send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
         
-    return redirect('/')
-    
+    return "Verification process completed at " + str(timezone.now())
+ 
+ 
+ 
+ 
+
+   
 @shared_task
 def set_past_event_status():
     today = datetime.now().date()
