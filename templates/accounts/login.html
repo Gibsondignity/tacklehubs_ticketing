@@ -53,9 +53,11 @@
   }
 
 
-  .loginpanel-2{
+  .loginpanel-2, .loginbtn{
     display: none;
   }
+
+  registerbtn
 
 
   </style>
@@ -67,7 +69,7 @@
             <div class="row">
                 <div class="col-12">
                     <header class="entry-header">
-                        <h1 class="entry-title">Login/Register</h1>
+                        <h1 class="entry-title"> User Account </h1>
                     </header>
                 </div>
             </div>
@@ -78,7 +80,8 @@
 	<div class="error-pagewrap" >
 		<div class="error-page-int">
 			<div class="text-center" style="margin-bottom: 30px; padding: 20px;">
-        <a style="margin-right: 1.5rem"><button id="loginbtn" class="btn loginbtn gradient-bg">Login/Register</button></a>
+        <a style="margin-right: 1.5rem"><button id="registerbtn" class="btn registerbtn gradient-bg"> Register </button></a>
+        <a style="margin-right: 1.5rem"><button id="loginbtn" class="btn loginbtn gradient-bg">Login</button></a>
       </div>
 
 
@@ -96,18 +99,16 @@
                     <div class="form-group">
                         <label class="control-label" for="username">Email</label>
                         <input type="email" placeholder="" title="Please enter you username" required name="email" id="email" class="form-control">
-                        {% comment %} <span class="help-block small">Your email</span> {% endcomment %}
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="password">Password</label>
                         <input type="password" title="Please enter your password" required name="password" id="password" class="form-control">
-                        {% comment %} <span class="help-block small">Your strong password</span> {% endcomment %}
                     </div>
                     <div class="">
                         <input type="checkbox" id="rememer" style="margin-right: 5px" value=""/> <label for="dog">Remember Me</label>
                     </div>
                     <div style="padding: 10px;"></div>
-                    <button class="btn gradient-bg loginbtn">Login</button>
+                    <button class="btn gradient-bg">Login</button>
                     <i><a class="" href="{% url 'password_reset' %}">Forgot password?</a></i>
                     <div></div>
                 </form>
@@ -126,34 +127,28 @@
                     <div class="form-group">
                         <label class="control-label" for="username">First Name</label>
                         <input type="text" placeholder="" title="Please enter you username" required="" value="" name="{{form.first_name.name}}" id="{{form.first_name.name}}" class="form-control">
-                        {% comment %} <span class="help-block small">Your email</span> {% endcomment %}
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="username">Last Name</label>
                         <input type="text" placeholder="" title="Please enter you username" required="" value="" name="{{form.last_name.name}}" id="{{form.last_name.name}}" class="form-control">
-                        {% comment %} <span class="help-block small">Your email</span> {% endcomment %}
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="username">Email</label>
                         <input type="text" placeholder="" title="Please enter you username" required="" value="" name="email" id="email" class="form-control">
-                        {% comment %} <span class="help-block small">Your email</span> {% endcomment %}
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="password">Password</label>
                         <input type="password" title="Please enter your password" placeholder="" required="" value="" name="{{form.password.name}}" id="{{form.password.name}}" class="form-control">
-                        {% comment %} <span class="help-block small">Your strong password</span> {% endcomment %}
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="password">Confirm Password</label>
                         <input type="password" title="Please enter your password" placeholder="" required="" value="" name="{{form.confirm_password.name}}" id="{{form.confirm_password.name}}" class="form-control">
-                        {% comment %} <span class="help-block small">Your strong password</span> {% endcomment %}
                     </div>
                     <div class="">
                         <input type="checkbox" id="rememer" style="margin-right: 5px" value=""/> <label for="dog">Remember Me</label>
                     </div>
                     <div style="padding: 10px;"></div>
-                    <button class="btn gradient-bg loginbtn">Register</button>
-                    {% comment %} <a class="btn btn-default btn-block" href="#">Register</a> {% endcomment %}
+                    <button class="btn gradient-bg">Register</button>
                     <i><a class="" href="{% url 'password_reset' %}">Forgot password?</a></i>
                     <div></div>
                 </form>
@@ -177,12 +172,22 @@
       $(document).ready(function(){
 
         $("#loginbtn").click(function() {
-          $(".loginpanel-1").toggle();
-          $(".loginpanel-2").toggle();
+          $(".loginpanel-1").show();
+          $(".loginpanel-2").hide()
+          
+          $("#registerbtn").show()
+          $("#loginbtn").hide()
         });
-        
+
+        $("#registerbtn").click(function() {
+          $(".loginpanel-1").hide();
+          $(".loginpanel-2").show()
+          
+          $("#registerbtn").hide()
+          $("#loginbtn").show()
       });
 
+    });
     </script>
 
     {% endblock content %}

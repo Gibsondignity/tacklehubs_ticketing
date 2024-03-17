@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
+
+from dashboard.models import *
 from .backend_email import EmailBackend
 from django.contrib import messages
 from django.conf import settings
@@ -28,6 +30,12 @@ from email.mime.multipart import MIMEMultipart
 
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
+from decouple import config
+
+
+protocol = config("PROTOCOL")
+domain = config("URL")
+
 
 
     
@@ -52,6 +60,13 @@ def account_login(request):
                 messages.success(request, "You're logged in as an admin")
                 return redirect(reverse("administration"))     
             else:
+                bank = BankAccounts.objects.filter(user=user).first()
+                userinfo = UserInfo.objects.filter(user=user).first()
+                
+                if not bank or not userinfo:
+                    messages.success(request, "Please finish setting up your profile")
+                    return redirect(reverse("profile"))
+                
                 messages.success(request, "Login successfull")
                 return redirect(reverse("dashboard"))   
         else:
@@ -59,6 +74,7 @@ def account_login(request):
             return redirect("login")
     
     return render(request, "accounts/login.html", context)
+
 
 
 
@@ -85,6 +101,7 @@ def account_register(request):
  
  
  
+ 
 def account_logout(request):
     user = request.user
     if user.is_authenticated:
@@ -100,8 +117,9 @@ def account_logout(request):
 
 
 
-# reset password
 
+
+# reset password
 def password_reset_request(request):
     #print("Here")
 
@@ -115,12 +133,6 @@ def password_reset_request(request):
             
             
             if associated_users.exists():
-                if settings.DEBUG == False:
-                    domain = 'tackletickets.org'
-                    protocol = 'https'
-                else:
-                    protocol = 'http'
-                    domain = '127.0.0.1:8000'
                     
                 for user in associated_users:
                     
@@ -134,13 +146,10 @@ def password_reset_request(request):
                     'domain': domain,
                         }
                     
-                    # email = render_to_string(email_template_name, c)
-                    
                     try:
                         
                         send_password(request, user.email, c)
                     
-                        #tenant_email(email, user.data['first_name'], tenant_status="resetpassword")
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect ("/password_reset/done/")
@@ -151,7 +160,9 @@ def password_reset_request(request):
 
 
 
-# tenant_email(email, user.data['first_name'], tenant_status="registered")
+
+
+
 def rest_email(receiver_email, context):
     
     sender_email = settings.EMAIL_HOST_USER
@@ -190,6 +201,10 @@ def rest_email(receiver_email, context):
         # return Response(e.errors, status=status.HTTP_400_BAD_REQUEST)
         pass
     
+
+
+
+
 
 def send_password(request, email, context): 
     subject, from_email, to = 'Password Reset Requested', 'ticket@tacklehubs.com', email

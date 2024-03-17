@@ -36,14 +36,14 @@ ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = "login"
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Replace with your broker URL
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_BEAT_SCHEDULE = {
-    'send-periodic-email-every-10-minutes': {
-        'task': 'tasks.send_periodic_email',
-        'schedule': timedelta(minutes=10),
-    },
-}
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Replace with your broker URL
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_BEAT_SCHEDULE = {
+#     'send-periodic-email-every-10-minutes': {
+#         'task': 'tasks.send_periodic_email',
+#         'schedule': timedelta(minutes=10),
+#     },
+# }
 
 
 
@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'dashboard',
     'administration',
     'crispy_forms',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -178,7 +180,7 @@ EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.
 API_KEY = config('API_KEY') #Remember to put your account API Key here
 PHONE = config('PHONE') #International format (233) excluding the (+)
 MESSAGE = config('MESSAGE')
-SENDER_ID = config('NiBS') #11 Characters maximum
+SENDER_ID = config('SENDER_ID') #11 Characters maximum
 DATE_TIME = "2017-05-02 00:59:00"
 
 
@@ -193,5 +195,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
+#BEAT SETTINGS
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 

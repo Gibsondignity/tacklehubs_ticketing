@@ -8,6 +8,7 @@ from accounts.models import User
 class UssdRequest(models.Model):
     phoneNumber = models.CharField(max_length=100)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     status = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now=True, null=True)
     date_updated = models.DateTimeField(auto_now_add=True, null=True)

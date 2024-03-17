@@ -32,14 +32,15 @@
     col: 5 !important
   }
 
-  .card-2 {
+  .card-2,
+  .card-3 {
     display: none;
-}
+  }
 
 
-.hover-container:hover .hover-element::after {
-  opacity: 1;
-}
+  .hover-container:hover .hover-element::after {
+    opacity: 1;
+  }
 </style>
 
 <div class="content-wrapper">
@@ -70,7 +71,9 @@
               <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
               <a href="#" class="btn btn-otline-dark"><i class="icon-printer"></i> Print</a>
               <a href="#" class="btn btn-primary text-white me-0 addnew"><i class="icon-plus"></i> Add New</a>
-              <button class="btn btn-primary text-white me-0 " id="toggleButton">Approved/Pending</button>
+              <button class="btn btn-primary text-white me-0 " id="approvedButton">Approved</button>
+              <button class="btn btn-primary text-white me-0 " id="pendingButton">Pending</button>
+              <button class="btn btn-primary text-white me-0 " id="othersButton">Others</button>
             </div>
           </div>
         </div>
@@ -102,35 +105,35 @@
               </tr>
             </thead>
             <tbody>
-              {% for event in events %}
-                {% if event.status == "Approved" %}
-                  <tr>
-                    <td class="location">{{event.event_name}}</td>
-                    <td>{{event.event_date}}</td>
-                    <td>{{event.event_time}}</td>
-                    <td class="description">{{event.description}}</td>
-                    <td>{{event.starting_price}}</td>
-                    <td class="location">{{event.location}}</td>
-                    <td>{{event.status}}</td>
-                    {% comment %} <td>{{event.date_created}}</td> {% endcomment %}
-                    <td>
-                      <button class=' btn-info reject btn-sm btn-flat' data-id='{{ event.id }}'><i
-                        class='mdi mdi-eye'></i> </button>
+              {% for event in approved %}
+              <tr>
+                <td class="location">{{event.event_name}}</td>
+                <td>{{event.event_date}}</td>
+                <td>{{event.event_time}}</td>
+                <td class="description">{{event.description}}</td>
+                <td>{{event.starting_price}}</td>
+                <td class="location">{{event.location}}</td>
+                <td>{{event.status}}</td>
+                {% comment %} <td>{{event.date_created}}</td> {% endcomment %}
+                <td>
+                  <a href="{% url 'event_details' event.slug event.id %}">
+                    <button class=' btn-info btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
+                    </button>
+                  </a>
 
-                      <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-table-edit'></i></button>
+                  <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-table-edit'></i></button>
 
-                      <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-delete'></i> </button>
+                  <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-delete'></i> </button>
 
-                      <button class=' btn-success btn-sm approve btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-check'></i> </button>
+                  <button class=' btn-success btn-sm approve btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-check'></i> </button>
 
-                      <button class=' btn-primary reject btn-sm btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-close'></i> </button>
-                    </td>
-                  </tr>
-                {% endif %}
+                  <button class=' btn-primary reject btn-sm btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-close'></i> </button>
+                </td>
+              </tr>
               {% endfor %}
 
             </tbody>
@@ -162,37 +165,99 @@
               </tr>
             </thead>
             <tbody>
-              {% for event in events %}
-                {% if event.status != "Approved" %}
-                  <tr>
-                    <td class="location">{{event.event_name}}</td>
-                    <td>{{event.event_date}}</td>
-                    <td>{{event.event_time}}</td>
-                    <td class="description">{{event.description}}</td>
-                    <td>{{event.starting_price}}</td>
-                    <td class="location">{{event.location}}</td>
-                    <td>{{event.status}}</td>
+              {% for event in pending %}
+              <tr>
+                <td class="location">{{event.event_name}}</td>
+                <td>{{event.event_date}}</td>
+                <td>{{event.event_time}}</td>
+                <td class="description">{{event.description}}</td>
+                <td>{{event.starting_price}}</td>
+                <td class="location">{{event.location}}</td>
+                <td>{{event.status}}</td>
 
-                    <td>
-                      <button class=' btn-info reject btn-sm btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-eye'></i> </button>
+                <td>
+                  <a href="{% url 'event_details' event.slug event.id %}">
+                    <button class=' btn-info btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
+                    </button>
+                  </a>
 
-                      <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-table-edit'></i></button>
+                  <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-table-edit'></i></button>
 
-                      <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-delete'></i> </button>
+                  <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-delete'></i> </button>
 
-                      <button class=' btn-success btn-sm approve btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-check'></i> </button>
+                  <button class=' btn-success btn-sm approve btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-check'></i> </button>
 
-                      <button class=' btn-primary reject btn-sm btn-flat' data-id='{{ event.id }}'><i
-                          class='mdi mdi-close'></i> </button>
+                  <button class=' btn-primary reject btn-sm btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-close'></i> </button>
 
-                      
-                    </td>
-                  </tr>
-                {% endif %}
+
+                </td>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card card-3">
+      <div class="card-body">
+        <h4 class="card-title">Others</h4>
+
+        <div class="table-responsive">
+
+          <table class="table " id="example3">
+
+            <thead>
+              <tr>
+                <th>Event Name</th>
+                <th>Event Date</th>
+                <th>Event Time</th>
+                <th>Description</th>
+                <th>Startng Price</th>
+                <th>Location</th>
+                <th>Status</th>
+                {% comment %} <th>Date Created</th> {% endcomment %}
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for event in past_n_rejected_events %}
+              <tr>
+                <td class="location">{{event.event_name}}</td>
+                <td>{{event.event_date}}</td>
+                <td>{{event.event_time}}</td>
+                <td class="description">{{event.description}}</td>
+                <td>{{event.starting_price}}</td>
+                <td class="location">{{event.location}}</td>
+                <td>{{event.status}}</td>
+
+                <td>
+                  <a href="{% url 'event_details' event.slug event.id %}">
+                    <button class=' btn-info btn-sm btn-flat' data-id='{{ event.id }}'><i class='mdi mdi-eye'></i>
+                    </button>
+                  </a>
+
+                  <button class=' btn-warning btn-sm edit btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-table-edit'></i></button>
+
+                  <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-delete'></i> </button>
+
+                  <button class=' btn-success btn-sm approve btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-check'></i> </button>
+
+                  <button class=' btn-primary reject btn-sm btn-flat' data-id='{{ event.id }}'><i
+                      class='mdi mdi-close'></i> </button>
+
+
+                </td>
+              </tr>
               {% endfor %}
 
             </tbody>
@@ -224,7 +289,8 @@
         <h4 class="modal-title"><b>Add New Event</b></h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'admin_dashboard_events' %}">
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data"
+          action="{% url 'admin_dashboard_events' %}">
           {% csrf_token %}
 
           {% for field in form %}
@@ -261,7 +327,8 @@
         <h4 class="modal-title"><b>Edit Event</b></h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'admin_updateEvent' %}">
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data"
+          action="{% url 'admin_updateEvent' %}">
           {% csrf_token %}
 
           <div class="form-group has-feedback">
@@ -332,7 +399,8 @@
         <h4 class="modal-title"><b>Delete Event</b></h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'admin_deleteEvents' %}">
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data"
+          action="{% url 'admin_deleteEvents' %}">
           {% csrf_token %}
           Are you sure want to delete this event?
 
@@ -364,10 +432,11 @@
       <div class="modal-header">
         {% comment %} <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button> {% endcomment %}
-        <h4 class="modal-title"><b>Delete Event</b></h4>
+        <h4 class="modal-title"><b>Approve Event</b></h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'change_event_status' %}">
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data"
+          action="{% url 'change_event_status' %}">
           {% csrf_token %}
           Are you sure want to approve this event?
 
@@ -376,8 +445,8 @@
 
       </div>
       <div class="modal-footer">
-        {% comment %} <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i
-            class="fa fa-close"></i> Close</button> {% endcomment %}
+        {% comment %} <button type="button" class="btn btn-default btn-flat pull-left closemodal"
+          data-dismiss="modal"><i class="fa fa-close"></i> Close</button> {% endcomment %}
         <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Approve</button>
       </div>
       </form>
@@ -397,7 +466,7 @@
       <div class="modal-header">
         {% comment %} <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button> {% endcomment %}
-        <h4 class="modal-title"><b>Delete Event</b></h4>
+        <h4 class="modal-title"><b>Reject Event</b></h4>
       </div>
       <div class="modal-body">
         <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{% url 'reject_event' %}">
@@ -406,12 +475,12 @@
 
           <input type="hidden" id="id" class="id" name="id">
           <br><br>
-          
+
 
       </div>
       <div class="modal-footer">
-        {% comment %} <button type="button" class="btn btn-default btn-flat pull-left closemodal" data-dismiss="modal"><i
-            class="fa fa-close"></i> Close</button> {% endcomment %}
+        {% comment %} <button type="button" class="btn btn-default btn-flat pull-left closemodal"
+          data-dismiss="modal"><i class="fa fa-close"></i> Close</button> {% endcomment %}
         <button type="submit" class="btn btn-primary btn-flat" name="add"><i class="fa fa-save"></i> Reject</button>
       </div>
       </form>
@@ -428,15 +497,32 @@
 <script>
 
 
-  $(document).ready(function() {
+  $(document).ready(function () {
     //$("#toggleButton").click(function() {
     //    $(".toggleDiv").toggle();
     //});
 
-    $("#toggleButton").click(function() {
-      $(".card-1").toggle();
-      $(".card-2").toggle();
+
+    $("#approvedButton").click(function () {
+      $(".card-1").show();
+      $(".card-2").hide();
+      $(".card-3").hide()
     });
+
+
+    $("#pendingButton").click(function () {
+      $(".card-1").hide();
+      $(".card-2").show();
+      $(".card-3").hide()
+    });
+
+    $("#othersButton").click(function () {
+      $(".card-1").hide();
+      $(".card-2").hide();
+      $(".card-3").show();
+    });
+
+
   });
 
 

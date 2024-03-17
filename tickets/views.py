@@ -11,23 +11,16 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import decimal
+from dashboard.task import send_email, send_sms, verify_payment_task
+from decouple import config
 
+
+url = config('URL')
 
 
 # Create your views here.
 def home(request):
     
-    
-#     today = datetime.now().date()
-
-# # Calculate the date range for the next 20 days
-#     end_date = today + timedelta(days=20)
-#     events = Event.objects.filter(event_date__gte = today)
-        
-#     upcomming_events = Event.objects.filter(event_date__range=[today, end_date]) 
-    
-#     media_url = "http://127.0.0.1:8000/media/"
-#     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
 
     today = datetime.now().date()
 
@@ -37,16 +30,13 @@ def home(request):
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     
-    
-    if settings.DEBUG == True:
-        media_url = "https://tackletickets.org/media/"
-    else:
-        media_url = "http://127.0.0.1:8000/media/" 
-    
+    media_url = f"http://{url}/media/" 
     
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
     return render(request, 'tickets/home/home.html', context)
+
+
 
 
 
@@ -60,10 +50,7 @@ def events(request):
     
     upcomming_events = Event.objects.filter(event_date__range=[today, end_date])
     
-    if settings.DEBUG == True:
-        media_url = "https://tackletickets.org/media/"
-    else:
-        media_url = "http://127.0.0.1:8000/media/" 
+    media_url = f"http://{url}/media/" 
         
     context = {"events": events, "media_url":media_url, 'upcomming_events':upcomming_events}
     
@@ -94,10 +81,7 @@ def event(request, id, slug):
     event = Event.objects.filter(id=id).first()
     categories = Category.objects.filter(event=event)
     
-    if settings.DEBUG == True:
-        media_url = "https://tackletickets.org/media/"
-    else:
-        media_url = "http://127.0.0.1:8000/media/" 
+    media_url = f"http://{url}/media/"  
         
     print("It worked", categories)
     context = {"event": event, "media_url":media_url, 'categories':categories}
@@ -152,80 +136,11 @@ def initiate_payment(request):
 
 
 def verify_payment(request, ref: str) -> HttpResponse:
-    payment = get_object_or_404(Ticket, ref=ref)
-    registration_id = str(str(payment.event.event_name[0])+str(payment.catgory.category_name[0])+str(payment.event.id)+str(payment.id))
-    print(registration_id)
-  
-    verified = payment.verify_payment()
-    
-    if verified:
-        messages.success(request, "Ticket reservation was successful! Please wait while we process your sms and email.")
-        Ticket.objects.filter(ref=ref).update(registration_id=registration_id)
-        first_name = payment.name.split(" ")[0]
-        #send_sms(payment.phone_number, registration_id, first_name, payment.number_of_tickets)
-        #send_email(registration_id, first_name, payment.email, payment.number_of_tickets)
+    messages.success(request, 'Thank you for for your ticket reservation. Please wait while we process your ticket.')
+    verify_payment_task().delay(ref) # Calling the function as
         
-    
-    
     return redirect('/')
 
 
 
 # Send SMS
-def send_sms(phone, id, name, number_of_tickets):
-    
-    phone = str(phone)
-    
-    try:
-        if phone[0] == '+':
-            phone= phone[1:].replace(' ', '')
-        else:
-            phone = phone.replace(' ', '')
-        
-        if phone[0] == '0':
-            phone = '233'+phone[1:]
-    except:
-        pass
-        
-    
-    message = f'''Hello%20{name}.%20Thank%20you%20for%20reserving%20your%20ticket!.%20Your%20ticket%20number%20is:%20{id}.%20Number%20of%20tickets:%20{number_of_tickets}.%20Have%20a%20great%20day!'''
-    content = f"https://sms.textcus.com/api/send?apikey=PqdIBy2psAhIqkH9c5AEgRL8YcZPovcn&destination={phone}&source=ThankYou!&dlr=1&type=0&message={message}"
-    print(content)
-    try: 
-        response = urllib.request.urlopen(content)
-    except:
-        pass
-    
-    
-    
-    
-def send_email(id, name, email, number_of_tickets):
-    
-    subject = 'Ticket Reservation'
-
-
-    password = settings.EMAIL_HOST_PASSWORD
-    sender_email = settings.EMAIL_HOST_USER
-
-    message = MIMEMultipart("alternative")
-    message["Subject"] = subject
-    message["From"] = sender_email
-    message["To"] = email
-
-
-    msg = f'Hello, {name}. Thank you for reserving your ticket. Your ticket number is: {id}. Number of tickets: {number_of_tickets} Have a great day!'
-    msg = MIMEText(msg, "html")
-
-
-    message.attach(msg)
-
-    try:
-        with smtplib.SMTP_SSL("mail.tacklehubs.com", 465) as server:
-            server.login(sender_email, password)
-            server.sendmail(
-                sender_email, email, message.as_string()
-            )
-    except Exception as e:
-        print(e)
-        # return Response(e.errors, status=status.HTTP_400_BAD_REQUEST)
-        pass

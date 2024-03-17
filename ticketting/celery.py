@@ -1,17 +1,23 @@
-from __future__ import absolute_import, unicode_literals
+# path/to/your/proj/src/cfehome/celery.py
 import os
 from celery import Celery
+from celery.schedules import crontab
 
-# setting the Django settings module.
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'easyrentproject.settings')
+
+
 app = Celery('easyrentproject')
+
+
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Looks up for task modules in Django applications and loads them
+
+app.conf.beat_schedule = {
+    'verify-payments-every-30-minutes': {
+        'task': 'dashboard.task.verify_all_payment',
+        'schedule': crontab(minute='*/30'),
+    },
+}
+
 app.autodiscover_tasks() 
-
-
-
-@app.task(bind=True, ignore_result=True)
-def debug_task(self):
-    print(f'Request: {self.request!r}')

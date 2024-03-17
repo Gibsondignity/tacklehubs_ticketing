@@ -5,7 +5,7 @@
 <body>
   {% include 'dashboard/head.html' %}
 
-  <div class="container-scroller"> 
+  <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
 
 
@@ -24,7 +24,7 @@
       {% include 'dashboard/sidebar.html' %}
 
       <div class="main-panel">
-        
+
         <!-- content-wrapper ends -->
 
         {% block content %}
@@ -50,89 +50,65 @@
 
   <script>
 
-    $(".closemodal").on("click", function(){
+    $(".closemodal").on("click", function () {
       $("#addnew").modal("hide");
       $("#delete").modal("hide");
       $("#edit").modal("hide");
-      
-  })
+
+    })
 
   </script>
 
-  
+
 
 
   <script>
-    $(function () {
-      $('#example1').DataTable()
-      var bookTable = $('#booklist').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
-        'searching'   : true,
-        'ordering'    : true,
-        'info'        : false,
-        'autoWidth'   : false,
-        'responsive'  : true,
-        'columnDefs': [
-          { "orderable": false, "targets": 0 }
-        ],
-        
 
-      })
-  
-      $('#searchBox').on('keyup', function(){
-        bookTable.search(this.value).draw();
+    $(document).ready(function () {
+      $('#example1').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+      });
     });
-  
-    })
 
 
-
-
-    $(function () {
-      $('#example2').DataTable()
-      var bookTable = $('#booklist').DataTable({
-        'paging'      : true,
-        'lengthChange': true,
-        'searching'   : true,
-        'ordering'    : true,
-        'info'        : false,
-        'autoWidth'   : false,
-        'responsive'  : true,
-        'columnDefs': [
-          { "orderable": false, "targets": 0 }
-        ],
-        
-
-      })
-  
-      $('#searchBox').on('keyup', function(){
-        bookTable.search(this.value).draw();
+    $(document).ready(function () {
+      $('#example2').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+      });
     });
-  
-    })
+
+    $(document).ready(function () {
+      $('#example3').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+      });
+    });
+  </script>
 
 
-    
-  </script> 
 
-
-    
   <script>
     {% if messages %}
-        {% for message in messages  %}
-            <script>
-                toastr.{{ message.tags }}('{{ message }}', '{{ message.tags|title }}');
-            </script>
-        {% endfor %}
-    {% endif %}
+    {% for message in messages %}
+    <script>
+      toastr.{{ message.tags }}('{{ message }}', '{{ message.tags | title }}');
   </script>
-  
-  
+  {% endfor %}
+  {% endif %}
+  </script>
+
+
 
   {% block script %}
   {% endblock script %}
 </body>
 
 </html>
-

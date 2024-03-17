@@ -29,4 +29,6 @@ urlpatterns = [
     
     path('administration/ticket_reservations', views.admin_ticket_reservations, name='admin_ticket_reservations'),
     path('administration/TicketsReportById', views.admin_TicketsReportById, name='admin_TicketsReportById'),
+    
+    path('administration/events/<str:slug>/<int:id>', views.view_event_tickets, name='event_details'),
 ]
