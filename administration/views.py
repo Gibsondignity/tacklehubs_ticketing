@@ -25,7 +25,7 @@ def is_admin(request):
 
 @login_required()
 def admin_dashboard(request):
-    
+
     is_admin(request)
     
     pending_events = Event.objects.filter(status = "Pending").count()
@@ -33,9 +33,35 @@ def admin_dashboard(request):
     ussd_events = UssdRequest.objects.filter(status = "True").count()
     peding_ussd_events = UssdRequest.objects.filter(status = "False").count()
     
+    events = Event.objects.all()
+    total_tickets = 0
+    paid_tickets = 0
+    unpaid_tickets = 0
+    total_number_of_tickets = 0
     
+    for event in events:
+        new_events = event.ticket_set.all()
+        for new_event in new_events:
+            total_tickets += new_event.amount
+            if new_event.verify == True:
+                paid_tickets+=new_event.amount
+                total_number_of_tickets+=1
+            if new_event.verify == False:
+                unpaid_tickets+=new_event.amount
+                
     
-    context = {'pending_events':pending_events, 'approved_events':approved_events, 'ussd_events':ussd_events, 'peding_ussd_events':peding_ussd_events}
+    context = {
+        'pending_events':pending_events, 
+        'approved_events':approved_events, 
+        'ussd_events':ussd_events, 
+        'peding_ussd_events':peding_ussd_events,
+        'total_tickets': total_tickets,
+        'paid_tickets': paid_tickets,
+        'unpaid_tickets': unpaid_tickets,
+        'total_number_of_tickets': total_number_of_tickets,
+        'domain':domain,
+        'protocol':protocol,      
+        }
     return render(request, 'administration/dashboard.html', context)
 
 
@@ -97,8 +123,18 @@ def view_event_tickets(request, slug, id):
     tickets = event.ticket_set.all()
     total_verified = tickets.filter(verify=True).count()
     total_unverified = tickets.filter(verify=False).count()
-    print(total_verified)
-    context = {'event': event, 'tickets': tickets, 'total_verified': total_verified, 'total_unverified': total_unverified}
+    total_amount_of_tickets = 0
+    for ticket in tickets:
+        if ticket.verify == True:
+            total_amount_of_tickets += ticket.amount
+        
+    context = {
+               'event': event, 
+               'tickets': tickets, 
+               'total_verified': total_verified, 
+               'total_unverified': total_unverified,
+               'total_amount_of_tickets': total_amount_of_tickets,
+               }
     
     return render(request, 'administration/event_details.html', context)
 

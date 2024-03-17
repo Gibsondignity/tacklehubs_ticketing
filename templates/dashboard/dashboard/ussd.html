@@ -61,7 +61,6 @@
             </thead>
             <tbody>
                 {% for ussd_request in ussd_requests %}
-                  {% if request.user == ussd_request.event.user %}
                     <tr>
                         <td>{{ussd_request.phoneNumber}}</td>
                         <td>{{ussd_request.event}}</td>
@@ -71,7 +70,6 @@
                             <button class=' btn-danger btn-sm delete btn-flat' data-id='{{ ussd_request.id }}'><i class='mdi mdi-delete'></i> </button>
                         </td> {% endcomment %}
                     </tr>
-                  {% endif %}
               {% endfor %}
             </tbody>
           </table> 

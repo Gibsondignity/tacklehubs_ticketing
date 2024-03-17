@@ -27,4 +27,6 @@ urlpatterns = [
     
     path('ticket_reservations', views.ticket_reservations, name='ticket_reservations'),
     path('TicketsReportById', views.TicketsReportById, name='TicketsReportById'),
+    
+    path('dashboard/events/<str:slug>/<int:id>', views.view_event_tickets, name='view_event_tickets'),
 ]

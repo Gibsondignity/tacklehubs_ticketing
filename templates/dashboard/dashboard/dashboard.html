@@ -41,20 +41,20 @@
                   <div class="statistics-details d-flex align-items-center justify-content-between">
                     <div>
                       <p class="statistics-title">Total Events</p>
-                      <h3 class="rate-percentage">0</h3>
+                      <h3 class="rate-percentage">{{total_events}}</h3>
                       
                     </div>
                     <div>
                       <p class="statistics-title">Total Categories</p>
-                      <h3 class="rate-percentage">0</h3>
+                      <h3 class="rate-percentage">{{total_categories}}</h3>
                       
                     </div>
                     <div>
                       <p class="statistics-title">USSD Requests</p>
-                      <h3 class="rate-percentage">0</h3>
+                      <h3 class="rate-percentage">{{total_ussd_requests}}</h3>
                       
                     </div>
-                    <div class="d-none d-md-block">
+                    {% comment %} <div class="d-none d-md-block">
                       <p class="statistics-title">Total Amount</p>
                       <h3 class="rate-percentage">0</h3>
                       
@@ -63,7 +63,7 @@
                       <p class="statistics-title">Total Bookings</p>
                       <h3 class="rate-percentage">0</h3>
                       
-                    </div>
+                    </div> {% endcomment %}
                     
                   </div>
                 </div>
@@ -74,16 +74,24 @@
                 <div class="col-lg-6 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <h4 class="card-title"> </h4>
-                      <canvas id="lineChart"></canvas>
+                      <h4 class="card-title"> Overall Total </h4>
+                      <script>
+                        amount = Number(parseFloat({{ total_tickets }})).toLocaleString("en", { minimumFractionDigits: 2 })
+                        document.write('<center> <h2>' + amount + '</h2> </center>')
+                      </script>
+                      <canvas id="areaChart"></canvas>
                     </div>
                   </div>
                 </div>
                 <div class="col-lg-6 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <h4 class="card-title"> </h4>
-                      <canvas id="barChart"></canvas>
+                      <h4 class="card-title"> Total Amount of Verified Tickets </h4>
+                      <script>
+                        amount = Number(parseFloat({{ paid_tickets }})).toLocaleString("en", { minimumFractionDigits: 2 })
+                        document.write('<center> <h2>' + amount + '</h2> </center>')
+                      </script>
+                      <canvas id="areaChart"></canvas>
                     </div>
                   </div>
                 </div>
@@ -92,7 +100,11 @@
                 <div class="col-lg-6 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <h4 class="card-title"></h4>
+                      <h4 class="card-title">Total Amount of Unverified Tickets</h4>
+                      <script>
+                        amount = Number(parseFloat({{ unpaid_tickets }})).toLocaleString("en", { minimumFractionDigits: 2 })
+                        document.write('<center> <h2>' + amount + '</h2> </center>')
+                      </script>
                       <canvas id="areaChart"></canvas>
                     </div>
                   </div>
@@ -100,7 +112,10 @@
                 <div class="col-lg-6 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <h4 class="card-title"></h4>
+                      <h4 class="card-title">Total Number of Verified Tickets</h4>
+                      <script>
+                        document.write('<center> <h2>' + {{total_number_of_tickets}} + '</h2> </center>')
+                      </script>
                       <canvas id="areaChart"></canvas>
                     </div>
                   </div>

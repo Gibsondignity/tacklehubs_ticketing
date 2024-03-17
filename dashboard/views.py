@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.conf import settings
+from .models import *
 # Create your views here.
 
 from decouple import config
@@ -18,7 +19,40 @@ protocol = config('PROTOCOL')
 @login_required()
 def dashboard(request):
  
-    return render(request, 'dashboard/dashboard/dashboard.html', context={'domain':domain, 'protocol':protocol})
+    total_events = Event.objects.filter( user=request.user).count()
+    events = Event.objects.filter( user=request.user)
+    total_categories = Category.objects.filter( user=request.user).count()
+    total_ussd_requests = UssdRequest.objects.filter(user=request.user).count()
+    total_ussd_request = UssdRequest.objects.filter(user=request.user)
+    total_tickets = 0
+    paid_tickets = 0
+    unpaid_tickets = 0
+    total_number_of_tickets = 0
+    
+    for event in events:
+        if event.user == request.user:
+            new_events = event.ticket_set.all()
+            for new_event in new_events:
+                total_tickets += new_event.amount
+                if new_event.verify == True:
+                    paid_tickets+=new_event.amount
+                    total_number_of_tickets+=1
+                if new_event.verify == False:
+                    unpaid_tickets+=new_event.amount
+            
+    
+    context = {'total_events':total_events, 
+               'total_categories':total_categories, 
+               'total_ussd_requests': total_ussd_requests, 
+               'total_ussd_request': total_ussd_request,
+               'total_tickets': total_tickets,
+               'paid_tickets': paid_tickets,
+               'unpaid_tickets': unpaid_tickets,
+               'total_number_of_tickets': total_number_of_tickets,
+               'domain':domain,
+               'protocol':protocol,
+               }
+    return render(request, 'dashboard/dashboard/dashboard.html', context)
 
 
 
@@ -52,6 +86,29 @@ def events(request):
     return render(request, 'dashboard/dashboard/events.html', context)
 
 
+
+
+
+@login_required
+def view_event_tickets(request, slug, id):
+    event = Event.objects.filter(id=id).first()
+    tickets = event.ticket_set.all()
+    total_verified = tickets.filter(verify=True).count()
+    total_unverified = tickets.filter(verify=False).count()
+    total_amount_of_tickets = 0
+    for ticket in tickets:
+        if ticket.verify == True:
+            total_amount_of_tickets += ticket.amount
+        
+    context = {
+               'event': event, 
+               'tickets': tickets, 
+               'total_verified': total_verified, 
+               'total_unverified': total_unverified,
+               'total_amount_of_tickets': total_amount_of_tickets,
+               }
+    
+    return render(request, 'dashboard/dashboard/event_details.html', context)
 
 
 
@@ -234,14 +291,17 @@ def getCategories(request):
 @login_required()
 def ussd(request):
     form = UssdRequestForm()
-    ussd_requests = UssdRequest.objects.filter()
+    ussd_requests = UssdRequest.objects.filter(user=request.user)
+    
     
     events = Event.objects.filter(user=request.user)
     
     if request.method == "POST":
         form = UssdRequestForm(request.POST or None)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.user = request.user
+            user.save()
             messages.success(request, "Request sent successfully. We will contact you within two working days.")
             return redirect(reverse('dashboard_ussd'))
         else:
