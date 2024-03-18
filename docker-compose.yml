@@ -1,26 +1,34 @@
-version: '3'
+version: '3.8'
 
 services:  
 
   tackletickets:
-    image: tackletickets
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    build: .
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8003"
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "8003:8003"
     depends_on:
       - redis
-      
 
-  celery:
-    build: .
-    command: celery -A tackletickets worker --loglevel=info
+  worker:
+    build: ./worker
+    command: celery -A ticketting worker --loglevel=info
     volumes:
-      - .:/code
+      - ./worker:/app
     depends_on:
-      - db
+      - redis
+
+  beat:
+    build: ./worker
+    command: celery -A ticketting beat --loglevel=info
+    volumes:
+      - ./worker:/app
+    depends_on:
       - redis
 
   redis:
-    image: redis:1.0
+    image: redis:latest
+    ports:
+      - "6379:6379"

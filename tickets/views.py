@@ -135,7 +135,7 @@ def initiate_payment(request):
 
 
 
-def verify_payment(request, ref: str) -> HttpResponse:
+def verify_payment(request, ref):
     messages.success(request, 'Thank you for for your ticket reservation. Please wait while we process your ticket.')
     verify_payment_task().delay(ref) # Calling the function as
         

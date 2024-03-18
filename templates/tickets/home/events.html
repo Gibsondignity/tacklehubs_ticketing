@@ -1,6 +1,6 @@
 
 {% load static %}
-
+ 
 {% block events %}
     <div class="homepage-featured-events">
         <div class="container">
@@ -12,7 +12,7 @@
                         
                         <div class="event-content-wrap positioning-event-{{event.id}}">
                             <figure>
-                                <a href="{% url 'event' event.id event.slug %}"><img src={{media_url}}{{event.picture}} alt="1">
+                                <a href="{% url 'event' event.id event.slug %}"><img src={{media_url}}{{event.picture}} alt="event picture">
                             </figure>
 
                             <header class="entry-header">
