@@ -29,6 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+GOOGLE_ANALYTICS_TRACKING_ID = config('GOOGLE_ANALYTICS_TRACKING_ID')
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

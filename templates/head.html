@@ -1,11 +1,21 @@
 {% load static %}
+{% load seo %}
+
 <head>
-    <title>TackleHubs Ticketing</title>
+    <title>Tackle Tickets</title>
 
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="author" content="Tackle Tickets">
 
+    <meta name="description" content="Obtain event tickets conveniently with Tackle Tickets, your all-in-one platform for stress-free ticketing processes...">
+    <meta name="keywords" content="Tackle Tickets, ticket selling platforms, event ticketing platforms, Tackle Hubs Ticketing, online ticketing in ghana">
+    {% include 'structured_data.html' %}
+
+    <link rel="icon" href="{% static 'images/tacklehubs_logo.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/tacklehubs_logo.png' %}" type="image/jpg">
+    <link rel="icon" href="{% static 'images/tacklehubs_logo.png' %}" type="image/png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     {% comment %} <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> {% endcomment %}
